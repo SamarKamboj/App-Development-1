@@ -86,11 +86,6 @@
 
             <!-- Experience and Services -->
             <div class="form-row">
-                <div class="form-group col-md-4">
-                    <label for="experience">Experience</label>
-                    <input type="number" class="form-control" id="experience" name="experience" placeholder="(in years)"
-                        required>
-                </div>
                 <div class="form-group col-md-8">
                     <label for="services">Available Services</label>
                     <select class="form-control" id="services" name="service" required>
@@ -99,6 +94,11 @@
                         <option value="{{ service['id'] }}">{{ service['name'] }}</option>
                         {% endfor %}
                     </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="experience">Experience</label>
+                    <input type="number" class="form-control" id="experience" name="experience" placeholder="(in years)"
+                        required>
                 </div>
             </div>
 
