@@ -4,24 +4,24 @@ CREATE TABLE "admins" (
     PRIMARY KEY("username")
 );
 
-INSERT INTO "admins"
+INSERT OR IGNORE INTO "admins"
 VALUES ('admin', 'admin');
 
 CREATE TABLE "professionals" (
     "id" INTEGER,
     "fname" TEXT NOT NULL,
     "lname" TEXT,
-    "email" TEXT NOT NULL UNIQUE,
-    "password" TEXT NOT NULL,
-    "service_id" INTEGER NOT NULL,
-    "experience" INTEGER NOT NULL,
     "address" TEXT NOT NULL,
     "pincode" INTEGER NOT NULL,
     "contact_number" TEXT NOT NULL UNIQUE,
+    "email" TEXT NOT NULL UNIQUE,
+    "password" TEXT NOT NULL,
+    "service_id" INTEGER NOT NULL,
+    "experience" INTEGER,
     "description" TEXT NOT NULL,
     "date_created" DATETIME DEFAULT CURRENT_TIMESTAMP,
-    "status" CHAR(1) CHECK("status" in ('A', 'N')),
-    "rating" INTEGER,
+    "rating" REAL,
+    "status" TEXT CHECK("status" in ('new', 'accepted', 'rejected', 'blocked', 'deleted')),
     PRIMARY KEY("id"),
     FOREIGN KEY("service_id") REFERENCES "services"("id")
 );
@@ -30,10 +30,11 @@ CREATE TABLE "customers" (
     "id" INTEGER,
     "fname" TEXT NOT NULL,
     "lname" TEXT,
-    "email" TEXT NOT NULL UNIQUE,
-    "password" TEXT NOT NULL,
     "address" TEXT,
     "pincode" INTEGER,
+    "contact_number" TEXT NOT NULL UNIQUE,
+    "email" TEXT NOT NULL UNIQUE,
+    "password" TEXT NOT NULL,
     PRIMARY KEY("id")
 );
 
@@ -52,7 +53,8 @@ CREATE TABLE "service_requests" (
     "professional_id" INTEGER NOT NULL,
     "date_of_request" DATETIME DEFAULT CURRENT_TIMESTAMP,
     "date_of_completion" DATETIME,
-    "status" CHAR(1) CHECK("status" in ('R', 'A', 'C')),
+    "status" TEXT CHECK("status" in ('requested', 'accepted', 'closed')),
+    "rating" INTEGER,
     "remarks" TEXT,
     PRIMARY KEY("id"),
     FOREIGN KEY("service_id") REFERENCES "services"("id"),
