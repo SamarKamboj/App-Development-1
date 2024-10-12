@@ -1,11 +1,10 @@
 CREATE TABLE "admins" (
-    "id" INTEGER,
-    "username" TEXT NOT NULL UNIQUE,
+    "username" TEXT,
     "password" TEXT NOT NULL,
-    PRIMARY KEY("id")
+    PRIMARY KEY("username")
 );
 
-INSERT INTO "admins" ("username", "password")
+INSERT INTO "admins"
 VALUES ('admin', 'admin');
 
 CREATE TABLE "professionals" (
@@ -15,12 +14,14 @@ CREATE TABLE "professionals" (
     "email" TEXT NOT NULL UNIQUE,
     "password" TEXT NOT NULL,
     "service_id" INTEGER NOT NULL,
-    "experience" INTEGER,
-    "address" TEXT,
-    "pincode" INTEGER,
-    "description" TEXT,
+    "experience" INTEGER NOT NULL,
+    "address" TEXT NOT NULL,
+    "pincode" INTEGER NOT NULL,
+    "contact_number" TEXT NOT NULL UNIQUE,
+    "description" TEXT NOT NULL,
     "date_created" DATETIME DEFAULT CURRENT_TIMESTAMP,
     "status" CHAR(1) CHECK("status" in ('A', 'N')),
+    "rating" INTEGER,
     PRIMARY KEY("id"),
     FOREIGN KEY("service_id") REFERENCES "services"("id")
 );
@@ -39,8 +40,8 @@ CREATE TABLE "customers" (
 CREATE TABLE "services" (
     "id" INTEGER,
     "name" TEXT NOT NULL UNIQUE,
-    "description" TEXT,
-    "price" NUMERIC NOT NULL,
+    "description" TEXT NOT NULL,
+    "price" REAL NOT NULL,
     PRIMARY KEY("id")
 );
 
