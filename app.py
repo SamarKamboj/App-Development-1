@@ -152,8 +152,8 @@ def professional_homepage(name):
         else:
             return redirect(url_for("login"))
 
-@app.route("/service/<path:subpath>", methods=["POST"])
-@app.route("/service/<path:subpath>/<int:id>", methods=["POST"])
+@app.route("/action/<path:subpath>", methods=["POST"])
+@app.route("/action/<path:subpath>/<int:id>", methods=["POST"])
 def service(subpath, id=None):
     if subpath == 'add':
         name = request.form.get("name")

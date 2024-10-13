@@ -1,30 +1,30 @@
 <!-- Modal -->
-<div class="modal fade" id="serviceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+<div class="modal fade" id="serviceEditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header justify-content-center">
-                <h5 class="modal-title text-center" id="exampleModalLongTitle">New Service</h5>
+                <h5 class="modal-title text-center" id="exampleModalLongTitle">Update Service</h5>
             </div>
             <div class="modal-body">
-                <form action="/action/add" id="addService" method="post">
+                <form action="/service/edit" id="editService" method="post">
                     <div class="form-group">
                         <label for="name">Name</label>
-                        <input autofocus type="text" class="form-control" id="name" name="name" autocomplete="off" required>
+                        <input autofocus type="text" class="form-control" id="name" name="name" value="{{ service['name'] }}" required>
                     </div>
                     <div class="form-group">
                         <label for="description">Description</label>
-                        <textarea class="form-control" id="description" name="description" rows="5"></textarea>
+                        <textarea class="form-control" id="description" name="description" rows="5" value="{{ service['description'] }}"></textarea>
                     </div>
                     <div class="form-group">
                         <label for="price">Price</label>
-                        <input type="number" min="1" step="any" class="form-control" id="price" name="price" required>
+                        <input type="number" min="1" step="any" class="form-control" id="price" name="price" value="{{ service['price'] }}" required>
                     </div>
                 </form>
             </div>
             <div class="modal-footer justify-content-center">
                 <button type="button" class="btn btn-secondary mx-2" data-dismiss="modal" style="width: 150px;">Cancel</button>
-                <button type="submit" class="btn btn-primary mx-2" form="addService" style="width: 150px;">Add</button>
+                <button type="submit" class="btn btn-primary mx-2" form="editService" style="width: 150px;">Update</button>
             </div>
         </div>
     </div>
