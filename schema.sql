@@ -7,6 +7,14 @@ CREATE TABLE "admins" (
 INSERT OR IGNORE INTO "admins"
 VALUES ('admin', 'admin');
 
+CREATE TABLE "services" (
+    "id" INTEGER,
+    "name" TEXT NOT NULL UNIQUE,
+    "description" TEXT NOT NULL,
+    "price" REAL NOT NULL,
+    PRIMARY KEY("id")
+);
+
 CREATE TABLE "professionals" (
     "id" INTEGER,
     "fname" TEXT NOT NULL,
@@ -20,10 +28,10 @@ CREATE TABLE "professionals" (
     "experience" INTEGER,
     "description" TEXT NOT NULL,
     "date_created" DATETIME DEFAULT CURRENT_TIMESTAMP,
-    "rating" REAL,
+    "rating" REAL DEFAULT 0,
     "status" TEXT CHECK("status" in (NULL, 'active', 'block')) DEFAULT NULL,
     PRIMARY KEY("id"),
-    FOREIGN KEY("service_id") REFERENCES "services"("id")
+    FOREIGN KEY("service_id") REFERENCES "services"("id") ON DELETE CASCADE
 );
 
 CREATE TABLE "customers" (
@@ -39,14 +47,6 @@ CREATE TABLE "customers" (
     PRIMARY KEY("id")
 );
 
-CREATE TABLE "services" (
-    "id" INTEGER,
-    "name" TEXT NOT NULL UNIQUE,
-    "description" TEXT NOT NULL,
-    "price" REAL NOT NULL,
-    PRIMARY KEY("id")
-);
-
 CREATE TABLE "service_requests" (
     "id" INTEGER,
     "service_id" INTEGER NOT NULL,
@@ -58,7 +58,7 @@ CREATE TABLE "service_requests" (
     "rating" INTEGER,
     "remarks" TEXT,
     PRIMARY KEY("id"),
-    FOREIGN KEY("service_id") REFERENCES "services"("id"),
-    FOREIGN KEY("customer_id") REFERENCES "customers"("id"),
-    FOREIGN KEY("professional_id") REFERENCES "professionals"("id")
+    FOREIGN KEY("service_id") REFERENCES "services"("id") ON DELETE CASCADE,
+    FOREIGN KEY("customer_id") REFERENCES "customers"("id") ON DELETE CASCADE,
+    FOREIGN KEY("professional_id") REFERENCES "professionals"("id") ON DELETE CASCADE
 );

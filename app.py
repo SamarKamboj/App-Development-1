@@ -54,10 +54,11 @@ def customer_signup():
         lname = request.form.get("lname")
         address = request.form.get("address")
         pincode = request.form.get("pincode")
+        contact_number = request.form.get("contact_number")
         email = request.form.get("email")
         password = request.form.get("password")
         helper.add_customer(fname=fname, lname=lname, address=address, pincode=pincode,
-                            email=email, password=password)
+                            contact_number=contact_number, email=email, password=password)
         return redirect("/login")
     else:
         return render_template("customer_signup.html")
@@ -69,14 +70,16 @@ def professional_signup():
         lname = request.form.get("lname")
         address = request.form.get("address")
         pincode = request.form.get("pincode")
+        contact_number = request.form.get("contact_number")
         email = request.form.get("email")
         password = request.form.get("password")
         service = request.form.get("service")
         experience = request.form.get("experience")
         description = request.form.get("description")
         helper.add_professional(fname=fname, lname=lname, email=email, password=password,
-                                address=address, pincode=pincode, service=service,
-                                experience=experience, description=description, )
+                                address=address, pincode=pincode, service_id=service,
+                                experience=experience, description=description,
+                                contact_number=contact_number)
         return redirect("/login")
     else:
         return render_template("professional_signup.html", services=helper.fetch_services())
@@ -95,9 +98,10 @@ def admin():
         
         if admin:
             professionals = helper.fetch_professionals()
+            customers = helper.fetch_customers()
             services = helper.fetch_services()
             service_requests = helper.fetch_service_requests()
-            return render_template("admin.html", professionals=professionals,
+            return render_template("admin.html", professionals=professionals, customers=customers,
                                    services=services, requests=service_requests)
         else:
             return redirect(url_for("login"))
@@ -171,10 +175,13 @@ def accept_reject_prof(id):
         return redirect(url_for("delete_prof", id=id))
     ...
 
-@app.route("/delete/<int:id>", methods=["GET", "POST"])
-def delete_prof(id):
-    if id:
+@app.route("/delete/<type>/<int:id>", methods=["GET", "POST"])
+def delete(type, id):
+    if type == 'professional' and id:
         helper.delete_professional(id=id)
+        return redirect(url_for("admin"))
+    elif type == 'customer' and id:
+        helper.delete_customer(id=id)
         return redirect(url_for("admin"))
     ...
 

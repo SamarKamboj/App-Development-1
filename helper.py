@@ -27,32 +27,39 @@ def fetch_admin(username, password):
                 (username, password)).fetchone()
         return admin
 
-def add_customer(fname, lname, email, password, address, pincode):
+def add_customer(fname, lname, email, password, address, pincode, contact_number):
     with get_db() as connection:
         db = connection.cursor()
-        db.execute('''INSERT INTO customers (fname, lname, email, password, address, pincode)
-            VALUES (?, ?, ?, ?, ?, ?)''',
-            (fname, lname, email, password, address, pincode)
+        db.execute('''INSERT INTO customers (fname, lname, email, password, address, pincode, contact_number)
+            VALUES (?, ?, ?, ?, ?, ?, ?)''',
+            (fname, lname, email, password, address, pincode, contact_number)
         )
         connection.commit()
 
 def fetch_customer(email, password):
     with get_db() as connection:
         db = connection.cursor()
-        customer = db.execute("SELECT * FROM customers WHERE email = ? AND password = ?",
+        return db.execute("SELECT * FROM customers WHERE email = ? AND password = ?",
                 (email, password)).fetchone()
-        return customer
-
-def add_professional(fname, lname, email, password, service, experience, address, pincode, description):
+    
+def fetch_customers():
     with get_db() as connection:
         db = connection.cursor()
-        print(service)
-        # service_id = db.execute("SELECT id FROM services WHERE name = ?", (service,)).fetchone()
-        if service:
-            # service_id = service_id["id"]
-            db.execute('''INSERT INTO professionals (fname, lname, email, password, service_id, experience, address, pincode, description, status)
+        return db.execute("SELECT * FROM customers ORDER BY status").fetchall()
+    
+def delete_customer(id):
+    with get_db() as connection:
+        db = connection.cursor()
+        db.execute("DELETE FROM customers WHERE id = ?", (id,))
+        connection.commit()
+
+def add_professional(fname, lname, email, password, service_id, experience, address, pincode, description, contact_number):
+    with get_db() as connection:
+        db = connection.cursor()
+        if service_id:
+            db.execute('''INSERT INTO professionals (fname, lname, email, password, service_id, experience, address, pincode, description, contact_number)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
-                (fname, lname, email, password, service, experience, address, pincode, description, 'N')
+                (fname, lname, email, password, service_id, experience, address, pincode, description, contact_number)
             )
             connection.commit()
         else:
@@ -67,50 +74,44 @@ def fetch_professional(email=None, password=None, id=None):
         elif id:
             return db.execute("SELECT * FROM professionals WHERE id = ?",
                     (id,)).fetchone()
+
+def fetch_professionals():
+    with get_db() as connection:
+        db = connection.cursor()
+        return db.execute("SELECT * FROM professionals ORDER BY status, date_created").fetchall()
         
 def update_prof_status(id):
     with get_db() as connection:
         db = connection.cursor()
-        db.execute("UPDATE professionals SET status = 'A' WHERE id = ?", (id,))
+        db.execute("UPDATE professionals SET status = 'active' WHERE id = ?", (id,))
         connection.commit()
         
 def delete_professional(id):
     with get_db() as connection:
         db = connection.cursor()
-        db.execute("DELETE FROM service_requests WHERE professional_id = ?", (id,))
         db.execute("DELETE FROM professionals WHERE id = ?", (id,))
         connection.commit()
-
-    
-def fetch_professionals():
-    with get_db() as connection:
-        db = connection.cursor()
-        professionals = db.execute("SELECT * FROM professionals ORDER BY status, date_created").fetchall()
-        return professionals
     
 def add_service(name, description, price):
     with get_db() as connection:
         db = connection.cursor()
-        db.execute("INSERT INTO services (name, description, price) VALUES (?, ?, ?)",
+        db.execute("INSERT INTO services (name, description, price) VALUES (?, ?, ROUND(?, 2))",
                    (name, description, price))
         connection.commit()
 
 def delete_service(id):
     with get_db() as connection:
         db = connection.cursor()
-        db.execute("DELETE FROM service_requests WHERE service_id = ?", (id,))
         db.execute("DELETE FROM services WHERE id = ?", (id,))
         connection.commit()
 
 def fetch_services():
     with get_db() as connection:
         db = connection.cursor()
-        services = db.execute("SELECT * FROM services").fetchall()
-        return services
+        return db.execute("SELECT * FROM services").fetchall()
     
 def fetch_service_requests():
     with get_db() as connection:
         db = connection.cursor()
-        requests = db.execute("SELECT * FROM service_requests").fetchall()
-        return requests
+        return db.execute("SELECT * FROM service_requests").fetchall()
 
