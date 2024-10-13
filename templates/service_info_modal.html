@@ -1,0 +1,19 @@
+<!-- Modal Trigger -->
+<div class="modal fade" id="serviceInfoModal{{ service['id'] }}" tabindex="-1" role="dialog" aria-labelledby="serviceModalLabel{{ service['id'] }}" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="serviceModalLabel{{ service['id'] }}">Service Details - {{ service['name'] }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><strong>ID:</strong> {{ service['id'] }}</p>
+                <p><strong>Name:</strong> {{ service['name'] }}</p>
+                <p style="word-wrap: break-word; word-break: break-word;"><strong>Description:</strong> {{ service['description'] }}</p>
+                <p><strong>Price:</strong> {{ service['price'] }}</p>
+            </div>
+        </div>
+    </div>
+</div>

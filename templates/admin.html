@@ -23,10 +23,8 @@
         .form-container {
             flex-grow: 1;
             width: 100%;
-            /* Full width for both sections! */
             padding: 20px;
             box-sizing: border-box;
-            /* Keep it neat with padding inside the width */
         }
 
         h1 {
@@ -36,10 +34,8 @@
 
         table {
             width: 100%;
-            /* Stretch table to full width */
             margin-top: 20px;
             table-layout: auto;
-            /* Auto-adjust columns like a pro! */
         }
     </style>
 </head>
@@ -47,7 +43,7 @@
 <body>
     <div class="page-wrapper">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a href="/admin" style="text-decoration: none; color: black;">
+            <a href="/admin" style="text-decoration: none; color: red;">
                 <h1>Welcome to Admin</h1>
             </a>
             <ul class="nav ml-auto">
@@ -69,21 +65,21 @@
                     <tr>
                         <th>ID</th>
                         <th>Service Name</th>
-                        <th>Description</th>
-                        <th>Price</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for service in services %}
                     <tr>
-                        <td>{{ service["id"] }}</td>
+                        <td>
+                            <a href="" data-toggle="modal" data-target="#serviceInfoModal{{ service['id'] }}">{{
+                                service['id'] }}</a>
+                            {% include 'service_info_modal.html' %}
+                        </td>
                         <td>{{ service["name"] }}</td>
-                        <td>{{ service["description"] }}</td>
-                        <td>{{ service["price"] }}</td>
                         <td>
                             <form action="{{ url_for('service', subpath='delete', id=service['id']) }}" method="post"
-                                onsubmit="return confirm('Are you sure you want to delete this service?');">
+                                onsubmit="return confirm('Are you sure you want to delete this service because this will remove all professionals from database?');">
                                 <button class="btn btn-outline-danger btn-sm" type="submit">Delete</button>
                             </form>
                         </td>
@@ -136,14 +132,18 @@
                             {% elif professional['status'] == 'active' %}
                             <form action="{{ url_for('block_unblock', user='professional', id=professional['id']) }}"
                                 method="post">
-                                <button class="btn btn-outline-secondary btn-sm" type="submit" value="block" name="action">Block</button>
-                                <button class="btn btn-outline-danger btn-sm" type="submit" value="remove" name="action">Remove</button>
+                                <button class="btn btn-outline-secondary btn-sm" type="submit" value="block"
+                                    name="action">Block</button>
+                                <button class="btn btn-outline-danger btn-sm" type="submit" value="remove"
+                                    name="action">Remove</button>
                             </form>
                             {% elif professional['status'] == 'block' %}
                             <form action="{{ url_for('block_unblock', user='professional', id=professional['id']) }}"
                                 method="post">
-                                <button class="btn btn-outline-secondary btn-sm" type="submit" value="unblock" name="action">Unblock</button>
-                                <button class="btn btn-outline-danger btn-sm" type="submit" value="remove" name="action">Remove</button>
+                                <button class="btn btn-outline-secondary btn-sm" type="submit" value="unblock"
+                                    name="action">Unblock</button>
+                                <button class="btn btn-outline-danger btn-sm" type="submit" value="remove"
+                                    name="action">Remove</button>
                             </form>
                             {% endif %}
                         </td>
@@ -176,13 +176,20 @@
                         <td>{{ customer["contact_number"] }}</td>
                         <td>
                             {% if customer['status'] == 'active' %}
-                            <form action="{{ url_for('delete', user='customer', id=customer['id']) }}" method="post"
-                                onsubmit="return confirm('Are you sure you want to remove this customer?');">
-                                <button class="btn btn-outline-danger btn-sm" type="submit">Remove</button>
+                            <form action="{{ url_for('block_unblock', user='customer', id=customer['id']) }}"
+                                method="post">
+                                <button class="btn btn-outline-secondary btn-sm" type="submit" value="block"
+                                    name="action">Block</button>
+                                <button class="btn btn-outline-danger btn-sm" type="submit" value="remove"
+                                    name="action">Remove</button>
                             </form>
                             {% elif customer['status'] == 'block' %}
-                            <form>
-                                ...
+                            <form action="{{ url_for('block_unblock', user='customer', id=customer['id']) }}"
+                                method="post">
+                                <button class="btn btn-outline-secondary btn-sm" type="submit" value="unblock"
+                                    name="action">Unblock</button>
+                                <button class="btn btn-outline-danger btn-sm" type="submit" value="remove"
+                                    name="action">Remove</button>
                             </form>
                             {% endif %}
                         </td>

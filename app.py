@@ -185,6 +185,15 @@ def block_unblock(user, id):
             return redirect(url_for("admin"))
         else:
             return redirect(url_for("delete", user='professional', id=id))
+    elif user == 'customer' and id:
+        if request.form.get("action") == 'block':
+            helper.update_customer_status(status='block', id=id)
+            return redirect(url_for("admin"))
+        elif request.form.get("action") == 'unblock':
+            helper.update_customer_status(status='active', id=id)
+            return redirect(url_for("admin"))
+        else:
+            return redirect(url_for("delete", user='customer', id=id))
 
 
 

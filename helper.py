@@ -86,6 +86,12 @@ def update_prof_status(status, id):
         db = connection.cursor()
         db.execute("UPDATE professionals SET status = ? WHERE id = ?", (status, id))
         connection.commit()
+
+def update_customer_status(status, id):
+    with get_db() as connection:
+        db = connection.cursor()
+        db.execute("UPDATE customers SET status = ? WHERE id = ?", (status, id))
+        connection.commit()
         
 def delete_professional(id):
     with get_db() as connection:
