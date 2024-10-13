@@ -80,9 +80,7 @@
                         <td>
                             <div class="form-container form-row">
                                 <form>
-                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#serviceEditModal">
-                                        Edit
-                                    </button>
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#serviceEditModal">Edit</button>
                                     {% include 'edit_service_modal.html' %}
                                 </form>
                                 <form action="{{ url_for('service', subpath='delete', id=service['id']) }}" method="post"
@@ -220,7 +218,7 @@
         $('#serviceModal').on('shown.bs.modal', function () {
             $('#name').trigger('focus');
         });
-    </script>
+    </script> 
 </body>
 
 </html>

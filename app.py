@@ -161,10 +161,15 @@ def service(subpath, id=None):
         price = request.form.get("price")
         helper.add_service(name=name, description=description, price=price)
         return redirect(url_for("admin"))
-    elif subpath == 'delete':
-        if id:
-            helper.delete_service(id=id)
-            return redirect(url_for("admin"))
+    elif subpath == 'update' and id:
+        updated_name = request.form.get("edit_name")
+        updated_description = request.form.get("edit_description")
+        updated_price = request.form.get("edit_price")
+        helper.update_service(id=id, name=updated_name, description=updated_description, price=updated_price)
+        return redirect(url_for("admin"))
+    elif subpath == 'delete' and id:
+        helper.delete_service(id=id)
+        return redirect(url_for("admin"))
 
 @app.route("/action/<int:id>", methods=["GET", "POST"])
 def accept_reject(id):

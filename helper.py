@@ -106,6 +106,13 @@ def add_service(name, description, price):
                    (name, description, price))
         connection.commit()
 
+def update_service(id, name, description, price):
+    with get_db() as connection:
+        db = connection.cursor()
+        db.execute("UPDATE services SET name = ?, description = ?, price = ? WHERE id = ?",
+                   (name, description, price, id))
+        connection.commit()
+
 def delete_service(id):
     with get_db() as connection:
         db = connection.cursor()
