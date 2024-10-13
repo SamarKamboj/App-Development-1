@@ -21,7 +21,7 @@ CREATE TABLE "professionals" (
     "description" TEXT NOT NULL,
     "date_created" DATETIME DEFAULT CURRENT_TIMESTAMP,
     "rating" REAL,
-    "status" TEXT CHECK("status" in ('new', 'accepted', 'rejected', 'blocked', 'deleted')),
+    "status" TEXT CHECK("status" in (NULL, 'active', 'block')) DEFAULT NULL,
     PRIMARY KEY("id"),
     FOREIGN KEY("service_id") REFERENCES "services"("id")
 );
@@ -35,6 +35,7 @@ CREATE TABLE "customers" (
     "contact_number" TEXT NOT NULL UNIQUE,
     "email" TEXT NOT NULL UNIQUE,
     "password" TEXT NOT NULL,
+    "status" TEXT CHECK("status" in ('active', 'block')) DEFAULT 'active',
     PRIMARY KEY("id")
 );
 
