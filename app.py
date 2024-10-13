@@ -166,21 +166,34 @@ def service(subpath, id=None):
             helper.delete_service(id=id)
             return redirect(url_for("admin"))
 
-@app.route("/approval/<int:id>", methods=["GET", "POST"])
-def accept_reject_prof(id):
-    if request.form.get("accept"):
-        helper.update_prof_status(id)
+@app.route("/action/<int:id>", methods=["GET", "POST"])
+def accept_reject(id):
+    if request.form.get("action") == "accept":
+        helper.update_prof_status(status='active', id=id)
         return redirect(url_for("admin"))
-    elif request.form.get("reject"):
-        return redirect(url_for("delete_prof", id=id))
-    ...
+    else:
+        return redirect(url_for("delete", user='professional', id=id))
+    
+@app.route("/action/<user>/<int:id>", methods=["GET", "POST"])
+def block_unblock(user, id):
+    if user == 'professional' and id:
+        if request.form.get("action") == 'block':
+            helper.update_prof_status(status='block', id=id)
+            return redirect(url_for("admin"))
+        elif request.form.get("action") == 'unblock':
+            helper.update_prof_status(status='active', id=id)
+            return redirect(url_for("admin"))
+        else:
+            return redirect(url_for("delete", user='professional', id=id))
 
-@app.route("/delete/<type>/<int:id>", methods=["GET", "POST"])
-def delete(type, id):
-    if type == 'professional' and id:
+
+
+@app.route("/delete/<user>/<int:id>", methods=["GET", "POST"])
+def delete(user, id):
+    if user == 'professional' and id:
         helper.delete_professional(id=id)
         return redirect(url_for("admin"))
-    elif type == 'customer' and id:
+    elif user == 'customer' and id:
         helper.delete_customer(id=id)
         return redirect(url_for("admin"))
     ...

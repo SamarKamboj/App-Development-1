@@ -81,10 +81,10 @@ def fetch_professionals():
         db = connection.cursor()
         return db.execute("SELECT * FROM professionals ORDER BY status, date_created").fetchall()
         
-def update_prof_status(id):
+def update_prof_status(status, id):
     with get_db() as connection:
         db = connection.cursor()
-        db.execute("UPDATE professionals SET status = 'active' WHERE id = ?", (id,))
+        db.execute("UPDATE professionals SET status = ? WHERE id = ?", (status, id))
         connection.commit()
         
 def delete_professional(id):

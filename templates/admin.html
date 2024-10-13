@@ -127,21 +127,23 @@
                         <td>{{ professional["rating"] }}</td>
                         <td>
                             {% if professional['status'] == None %}
-                            <form action="{{ url_for('accept_reject_prof', id=professional['id']) }}" method="post">
+                            <form action="{{ url_for('accept_reject', id=professional['id']) }}" method="post">
                                 <button class="btn btn-outline-success btn-sm" type="submit" value="accept"
-                                    name="accept">Accept</button>
+                                    name="action">Accept</button>
                                 <button class="btn btn-outline-danger btn-sm" type="submit" value="reject"
-                                    name="reject">Reject</button>
+                                    name="action">Reject</button>
                             </form>
                             {% elif professional['status'] == 'active' %}
-                            <form action="{{ url_for('delete', type='professional', id=professional['id']) }}"
-                                method="post"
-                                onsubmit="return confirm('Are you sure you want to remove this professional?');">
-                                <button class="btn btn-outline-danger btn-sm" type="submit">Remove</button>
+                            <form action="{{ url_for('block_unblock', user='professional', id=professional['id']) }}"
+                                method="post">
+                                <button class="btn btn-outline-secondary btn-sm" type="submit" value="block" name="action">Block</button>
+                                <button class="btn btn-outline-danger btn-sm" type="submit" value="remove" name="action">Remove</button>
                             </form>
                             {% elif professional['status'] == 'block' %}
-                            <form>
-                                ...
+                            <form action="{{ url_for('block_unblock', user='professional', id=professional['id']) }}"
+                                method="post">
+                                <button class="btn btn-outline-secondary btn-sm" type="submit" value="unblock" name="action">Unblock</button>
+                                <button class="btn btn-outline-danger btn-sm" type="submit" value="remove" name="action">Remove</button>
                             </form>
                             {% endif %}
                         </td>
@@ -174,7 +176,7 @@
                         <td>{{ customer["contact_number"] }}</td>
                         <td>
                             {% if customer['status'] == 'active' %}
-                            <form action="{{ url_for('delete', type='customer', id=customer['id']) }}" method="post"
+                            <form action="{{ url_for('delete', user='customer', id=customer['id']) }}" method="post"
                                 onsubmit="return confirm('Are you sure you want to remove this customer?');">
                                 <button class="btn btn-outline-danger btn-sm" type="submit">Remove</button>
                             </form>
