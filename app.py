@@ -41,7 +41,7 @@ def login():
             if customer:
                 session["username"] = email
                 session["password"] = password
-                return redirect(url_for("customer_homepage", name=(customer["fname"]+customer["lname"])))
+                return redirect(url_for("customer_homepage"))
             else:
                 return redirect("/login")
     else:
@@ -114,8 +114,8 @@ def admin_search():
         return render_template("admin_search.html")
     ...
 
-@app.route("/customer/<name>", methods=["GET", "POST"])
-def customer_homepage(name):
+@app.route("/customer", methods=["GET", "POST"])
+def customer_homepage():
     if request.method == "POST":
         ...
     else:
@@ -125,9 +125,11 @@ def customer_homepage(name):
         else:
             customer = None
 
-        # Ensure the user is logged in and the session matches the URL username
-        if customer and 'username' in session and session['username'] == customer["email"]:
-            return render_template("customer.html", customer=customer)
+        if customer:
+            services = helper.fetch_services()
+            service_requests = helper.fetch_service_req(customer_id=customer['id'])
+            return render_template("customer.html", customer=customer, services=services,
+                                   service_requests=service_requests)
         else:
             return redirect(url_for("login"))
         

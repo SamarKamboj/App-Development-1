@@ -129,3 +129,7 @@ def fetch_service_requests():
         db = connection.cursor()
         return db.execute("SELECT * FROM service_requests").fetchall()
 
+def fetch_service_req(customer_id):
+    with get_db() as connection:
+        db = connection.cursor()
+        return db.execute("SELECT * FROM service_requests WHERE customer_id = ?", (customer_id,)).fetchall()
