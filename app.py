@@ -33,7 +33,7 @@ def login():
             if professional:
                 session["username"] = email
                 session["password"] = password
-                return redirect(url_for("professional_homepage", name=(professional["fname"]+professional["lname"])))
+                return redirect(url_for("professional_homepage"))
             else:
                 return redirect("/login")
         elif login_type == "customer":
@@ -137,8 +137,8 @@ def customer_homepage():
 def customer_search():
     ...
         
-@app.route("/professional/<name>", methods=["GET", "POST"])
-def professional_homepage(name):
+@app.route("/professional", methods=["GET", "POST"])
+def professional_homepage():
     if request.method == "POST":
         ...
     else:
