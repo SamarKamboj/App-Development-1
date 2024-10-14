@@ -154,8 +154,8 @@ def professional_homepage(name):
         else:
             return redirect(url_for("login"))
 
-@app.route("/action/<path:subpath>", methods=["POST"])
-@app.route("/action/<path:subpath>/<int:id>", methods=["POST"])
+@app.route("/service/<path:subpath>", methods=["POST"])
+@app.route("/service/<path:subpath>/<int:id>", methods=["POST"])
 def service(subpath, id=None):
     if subpath == 'add':
         name = request.form.get("name")
@@ -173,7 +173,7 @@ def service(subpath, id=None):
         helper.delete_service(id=id)
         return redirect(url_for("admin"))
 
-@app.route("/action/<int:id>", methods=["GET", "POST"])
+@app.route("/accept_reject/<int:id>", methods=["GET", "POST"])
 def accept_reject(id):
     if request.form.get("action") == "accept":
         helper.update_prof_status(status='active', id=id)
@@ -181,7 +181,7 @@ def accept_reject(id):
     else:
         return redirect(url_for("delete", user='professional', id=id))
     
-@app.route("/action/<user>/<int:id>", methods=["GET", "POST"])
+@app.route("/block_unblock/<user>/<int:id>", methods=["GET", "POST"])
 def block_unblock(user, id):
     if user == 'professional' and id:
         if request.form.get("action") == 'block':
@@ -190,8 +190,10 @@ def block_unblock(user, id):
         elif request.form.get("action") == 'unblock':
             helper.update_prof_status(status='active', id=id)
             return redirect(url_for("admin"))
-        else:
+        elif request.form.get("action") == 'remove':
             return redirect(url_for("delete", user='professional', id=id))
+        else:
+            return redirect(url_for("admin"))
     elif user == 'customer' and id:
         if request.form.get("action") == 'block':
             helper.update_customer_status(status='block', id=id)
@@ -199,8 +201,10 @@ def block_unblock(user, id):
         elif request.form.get("action") == 'unblock':
             helper.update_customer_status(status='active', id=id)
             return redirect(url_for("admin"))
-        else:
+        elif request.form.get("action") == 'remove':
             return redirect(url_for("delete", user='customer', id=id))
+        else:
+            return redirect(url_for("admin"))
 
 
 
