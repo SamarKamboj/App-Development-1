@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div class="modal fade" id="serviceEditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+<div class="modal fade" id="serviceEditModal{{ service['id'] }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -7,7 +7,7 @@
                 <h5 class="modal-title text-center" id="exampleModalLongTitle">Update Service</h5>
             </div>
             <div class="modal-body">
-                <form action="{{ url_for('service', subpath='update', id=service['id']) }}" id="editService" method="post">
+                <form action="{{ url_for('service', subpath='update', id=service['id']) }}" id="editService{{ service['id'] }}" method="post">
                     <div class="form-group">
                         <label for="edit_name">Name</label>
                         <input autofocus type="text" class="form-control" id="edit_name" name="edit_name" value="{{ service['name'] }}" required>
@@ -24,7 +24,7 @@
             </div>
             <div class="modal-footer justify-content-center">
                 <button type="button" class="btn btn-secondary mx-2" data-dismiss="modal" style="width: 150px;">Cancel</button>
-                <button type="submit" class="btn btn-primary mx-2" form="editService" style="width: 150px;">Update</button>
+                <button type="submit" class="btn btn-primary mx-2" form="editService{{ service['id'] }}" style="width: 150px;">Update</button>
             </div>
         </div>
     </div>
