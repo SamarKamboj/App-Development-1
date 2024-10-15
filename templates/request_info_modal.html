@@ -1,0 +1,26 @@
+<!-- Modal Trigger -->
+<div class="modal fade" id="requestInfoModal{{ request['id'] }}" tabindex="-1" role="dialog" aria-labelledby="requestModalLabel{{ request['id'] }}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="requestModalLabel{{ request['id'] }}">Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: left;"><strong>ID:</strong> {{ request['id'] }}</p>
+                <p style="text-align: left;"><strong>Service ID:</strong> {{ request['service_id'] }}</p>
+                <p style="text-align: left;"><strong>Customer ID:</strong> {{ request['customer_id'] }}</p>
+                <p style="text-align: left;"><strong>Professional ID:</strong> {{ request['professional_id'] }}</p>
+                <p style="text-align: left;"><strong>Request Date:</strong> {{ request['request_date'] }}</p>
+                <p style="text-align: left;"><strong>Request Time (+00:00):</strong> {{ request['request_time'] }}</p>
+                <p style="text-align: left;"><strong>Completion Date:</strong> {{ request['completion_date'] }}</p>
+                <p style="text-align: left;"><strong>Completion Time (+00:00):</strong> {{ request['completion_time'] }}</p>
+                <p style="text-align: left;"><strong>Status:</strong> {{ request['status'] }}</p>
+                <p style="text-align: left;"><strong>Rating:</strong> {{ request['rating'] }}</p>
+                <p style="text-align: left;"><strong>Remarks:</strong> {{ request['remarks'] }}</p>
+            </div>
+        </div>
+    </div>
+</div>
