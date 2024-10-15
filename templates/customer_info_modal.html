@@ -9,13 +9,13 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p><strong>ID:</strong> {{ customer['id'] }}</p>
-                <p><strong>Name:</strong> {{ customer["fname"] + ' ' + customer["lname"] }}</p>
-                <p><strong>Email:</strong> {{ customer['email'] }}</p>
-                <p style="word-wrap: break-word; word-break: break-word;"><strong>Address:</strong> {{ customer['address'] }}</p>
-                <p><strong>Pincode:</strong> {{ customer['pincode'] }}</p>
-                <p><strong>Contact Number:</strong> {{ customer['contact_number'] }}</p>
-                <p><strong>Status:</strong> {{ customer['status'] }}</p>
+                <p style="text-align: left;"><strong>ID:</strong> {{ customer['id'] }}</p>
+                <p style="text-align: left;"><strong>Name:</strong> {{ customer["fname"] + ' ' + customer["lname"] }}</p>
+                <p style="text-align: left;"><strong>Email:</strong> {{ customer['email'] }}</p>
+                <p style="word-wrap: break-word; word-break: break-word; text-align: left;"><strong>Address:</strong> {{ customer['address'] }}</p>
+                <p style="text-align: left;"><strong>Pincode:</strong> {{ customer['pincode'] }}</p>
+                <p style="text-align: left;"><strong>Contact Number:</strong> {{ customer['contact_number'] }}</p>
+                <p style="text-align: left;"><strong>Status:</strong> {{ customer['status'] }}</p>
             </div>
         </div>
     </div>
