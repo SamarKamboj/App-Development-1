@@ -12,12 +12,14 @@
         body {
             height: 100%;
             margin: 0;
+            overflow-x: hidden;
         }
 
         .page-wrapper {
             display: flex;
             flex-direction: column;
             height: 100vh;
+            overflow-x: hidden;
         }
 
         .form-container {
@@ -25,6 +27,7 @@
             width: 100%;
             padding: 20px;
             box-sizing: border-box;
+            overflow-x: auto;
         }
 
         h1 {
@@ -36,6 +39,11 @@
             width: 100%;
             margin-top: 20px;
             table-layout: auto;
+        }
+
+        .table-responsive {
+            max-width: 100%;
+            overflow-x: auto;
         }
     </style>
 </head>
@@ -57,166 +65,227 @@
                 </li>
             </ul>
         </nav>
-        <!-- Services -->
-        <div class="form-container container-fluid">
-            <h2>Services</h2>
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Service Name</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for service in services %}
-                        <tr>
-                            <td>
-                                <a href="" data-toggle="modal" data-target="#serviceInfoModal{{ service['id'] }}">{{
-                                    service['id'] }}</a>
-                                {% include 'service_info_modal.html' %}
-                            </td>
-                            <td>{{ service["name"] }}</td>
-                            <td>
-                                <div class="form-row">
-                                    <div class="col">
-                                        <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal"
-                                            data-target="#serviceEditModal{{ service['id'] }}">Edit</button>
-                                        {% include 'edit_service_modal.html' %}
-                                    </div>
-                                    <div class="col">
-                                        <form action="{{ url_for('service', subpath='delete', id=service['id']) }}"
-                                            method="post"
-                                            onsubmit="return confirm('Are you sure you want to delete this service because this will remove all related professionals from database?');">
-                                            <button class="btn btn-outline-danger btn-sm" type="submit">Delete</button>
+
+        <div class="form-row text-center">
+            <div class="col-4">
+                <!-- Services -->
+                <div class="form-container container-fluid">
+                    <h2>Services</h2>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Service Name</th>
+                                    <th>Price</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for service in services %}
+                                <tr>
+                                    <td>
+                                        <a href="" data-toggle="modal"
+                                            data-target="#serviceInfoModal{{ service['id'] }}">{{
+                                            service['id'] }}</a>
+                                        {% include 'service_info_modal.html' %}
+                                    </td>
+                                    <td>{{ service["name"] }}</td>
+                                    <td>{{ service["price"] }}</td>
+                                    <td>
+                                        <div class="form-row">
+                                            <div class="col-4">
+                                                <button type="button" class="btn btn-outline-primary btn-sm"
+                                                    data-toggle="modal"
+                                                    data-target="#serviceEditModal{{ service['id'] }}">Edit</button>
+                                                {% include 'edit_service_modal.html' %}
+                                            </div>
+                                            <div class="col-8">
+                                                <form
+                                                    action="{{ url_for('service', subpath='delete', id=service['id']) }}"
+                                                    method="post"
+                                                    onsubmit="return confirm('Are you sure you want to delete this service because this will remove all related professionals from database?');">
+                                                    <button class="btn btn-outline-danger btn-sm"
+                                                        type="submit">Delete</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#serviceModal">
+                        + New Service
+                    </button>
+
+                    {% include 'add_service_modal.html' %}
+                </div>
+            </div>
+            <div class="col-8">
+                <!-- Customers -->
+                <div class="form-container container-fluid">
+                    <h2>Customers</h2>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Contact Number</th>
+                                    <th>Email</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for customer in customers %}
+                                <tr>
+                                    <td>
+                                        <a href="" data-toggle="modal"
+                                            data-target="#customerModal{{ customer['id'] }}">{{
+                                            customer['id'] }}</a>
+                                        {% include 'customer_info_modal.html' %}
+                                    </td>
+                                    <td>{{ customer["fname"] + ' ' + customer["lname"] }}</td>
+                                    <td>{{ customer["contact_number"] }}</td>
+                                    <td>{{ customer["email"] }}</td>
+                                    <td>
+                                        {% if customer['status'] == 'active' %}
+                                        <form
+                                            action="{{ url_for('block_unblock', user='customer', id=customer['id']) }}"
+                                            method="post">
+                                            <button class="btn btn-outline-secondary btn-sm" type="submit" value="block"
+                                                name="action">Block</button>
+                                            <button class="btn btn-outline-danger btn-sm" type="submit" value="remove"
+                                                name="action">Remove</button>
                                         </form>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                                        {% elif customer['status'] == 'block' %}
+                                        <form
+                                            action="{{ url_for('block_unblock', user='customer', id=customer['id']) }}"
+                                            method="post">
+                                            <button class="btn btn-outline-secondary btn-sm" type="submit"
+                                                value="unblock" name="action">Unblock</button>
+                                            <button class="btn btn-outline-danger btn-sm" type="submit" value="remove"
+                                                name="action">Remove</button>
+                                        </form>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#serviceModal">
-                + New Service
-            </button>
+        </div>
+        <div class="form-row text-center">
+            <div class="col-5">
+                <!-- Service Requests -->
+                <div class="form-container container-fluid">
+                    <h2>Service Requests</h2>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Request Date</th>
+                                    <th>Completion Date</th>
+                                    <th>Status</th>
+                                    <th>Rating</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for request in requests %}
+                                <tr>
+                                    <td>
+                                        <a href="" data-toggle="modal"
+                                            data-target="#requestInfoModal{{ request['id'] }}">
+                                            {{ request['id'] }}</a>
+                                        {% include 'request_info_modal.html' %}
+                                    </td>
+                                    <td>{{ request['request_date'] }}</td>
+                                    <td>{{ request['completion_date'] }}</td>
+                                    <td>{{ request['status'] }}</td>
+                                    <td>{{ request['rating'] }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-7">
+                <!-- Professionals -->
+                <div class="form-container container-fluid">
+                    <h2>Professionals</h2>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Contact Number</th>
+                                    <th>Service ID</th>
+                                    <th>Rating</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for professional in professionals %}
+                                <tr>
+                                    <td>
+                                        <a href="" data-toggle="modal"
+                                            data-target="#professionalModal{{ professional['id'] }}">{{
+                                            professional['id']
+                                            }}</a>
+                                        {% include 'professional_info_modal.html' %}
+                                    </td>
+                                    <td>{{ professional["fname"] + ' ' + professional["lname"] }}</td>
+                                    <td>{{ professional["contact_number"] }}</td>
+                                    <td>{{ professional["service_id"] }}</td>
+                                    <td>{{ professional["rating"] }}</td>
+                                    <td>
+                                        {% if professional['status'] == None %}
+                                        <form action="{{ url_for('accept_reject', id=professional['id']) }}"
+                                            method="post">
+                                            <button class="btn btn-outline-success btn-sm" type="submit" value="accept"
+                                                name="action">Accept</button>
+                                            <button class="btn btn-outline-danger btn-sm" type="submit" value="reject"
+                                                name="action">Reject</button>
+                                        </form>
+                                        {% elif professional['status'] == 'active' %}
+                                        <form
+                                            action="{{ url_for('block_unblock', user='professional', id=professional['id']) }}"
+                                            method="post">
+                                            <button class="btn btn-outline-secondary btn-sm" type="submit" value="block"
+                                                name="action">Block</button>
+                                            <button class="btn btn-outline-danger btn-sm" type="submit" value="remove"
+                                                name="action">Remove</button>
+                                        </form>
+                                        {% elif professional['status'] == 'block' %}
+                                        <form
+                                            action="{{ url_for('block_unblock', user='professional', id=professional['id']) }}"
+                                            method="post">
+                                            <button class="btn btn-outline-secondary btn-sm" type="submit"
+                                                value="unblock" name="action">Unblock</button>
+                                            <button class="btn btn-outline-danger btn-sm" type="submit" value="remove"
+                                                name="action">Remove</button>
+                                        </form>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            {% include 'add_service_modal.html' %}
-        </div>
-        <!-- Professionals -->
-        <div class="form-container container-fluid">
-            <h2>Professionals</h2>
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Contact Number</th>
-                            <th>Service ID</th>
-                            <th>Rating</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for professional in professionals %}
-                        <tr>
-                            <td>
-                                <a href="" data-toggle="modal"
-                                    data-target="#professionalModal{{ professional['id'] }}">{{ professional['id']
-                                    }}</a>
-                                {% include 'professional_info_modal.html' %}
-                            </td>
-                            <td>{{ professional["fname"] + ' ' + professional["lname"] }}</td>
-                            <td>{{ professional["contact_number"] }}</td>
-                            <td>{{ professional["service_id"] }}</td>
-                            <td>{{ professional["rating"] }}</td>
-                            <td>
-                                {% if professional['status'] == None %}
-                                <form action="{{ url_for('accept_reject', id=professional['id']) }}" method="post">
-                                    <button class="btn btn-outline-success btn-sm" type="submit" value="accept"
-                                        name="action">Accept</button>
-                                    <button class="btn btn-outline-danger btn-sm" type="submit" value="reject"
-                                        name="action">Reject</button>
-                                </form>
-                                {% elif professional['status'] == 'active' %}
-                                <form
-                                    action="{{ url_for('block_unblock', user='professional', id=professional['id']) }}"
-                                    method="post">
-                                    <button class="btn btn-outline-secondary btn-sm" type="submit" value="block"
-                                        name="action">Block</button>
-                                    <button class="btn btn-outline-danger btn-sm" type="submit" value="remove"
-                                        name="action">Remove</button>
-                                </form>
-                                {% elif professional['status'] == 'block' %}
-                                <form
-                                    action="{{ url_for('block_unblock', user='professional', id=professional['id']) }}"
-                                    method="post">
-                                    <button class="btn btn-outline-secondary btn-sm" type="submit" value="unblock"
-                                        name="action">Unblock</button>
-                                    <button class="btn btn-outline-danger btn-sm" type="submit" value="remove"
-                                        name="action">Remove</button>
-                                </form>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <!-- Customers -->
-        <div class="form-container container-fluid">
-            <h2>Customers</h2>
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Contact Number</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for customer in customers %}
-                        <tr>
-                            <td>
-                                <a href="" data-toggle="modal" data-target="#customerModal{{ customer['id'] }}">{{
-                                    customer['id'] }}</a>
-                                {% include 'customer_info_modal.html' %}
-                            </td>
-                            <td>{{ customer["fname"] + ' ' + customer["lname"] }}</td>
-                            <td>{{ customer["contact_number"] }}</td>
-                            <td>
-                                {% if customer['status'] == 'active' %}
-                                <form action="{{ url_for('block_unblock', user='customer', id=customer['id']) }}"
-                                    method="post">
-                                    <button class="btn btn-outline-secondary btn-sm" type="submit" value="block"
-                                        name="action">Block</button>
-                                    <button class="btn btn-outline-danger btn-sm" type="submit" value="remove"
-                                        name="action">Remove</button>
-                                </form>
-                                {% elif customer['status'] == 'block' %}
-                                <form action="{{ url_for('block_unblock', user='customer', id=customer['id']) }}"
-                                    method="post">
-                                    <button class="btn btn-outline-secondary btn-sm" type="submit" value="unblock"
-                                        name="action">Unblock</button>
-                                    <button class="btn btn-outline-danger btn-sm" type="submit" value="remove"
-                                        name="action">Remove</button>
-                                </form>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

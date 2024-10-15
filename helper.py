@@ -127,7 +127,10 @@ def fetch_services():
 def fetch_service_requests():
     with get_db() as connection:
         db = connection.cursor()
-        return db.execute("SELECT * FROM service_requests").fetchall()
+        return db.execute('''SELECT id, service_id, customer_id, professional_id,
+                          DATE(date_of_request) as request_date, TIME(date_of_request) as request_time,
+                          DATE(date_of_completion) as completion_date, TIME(date_of_completion) as completion_time,
+                          status, rating, remarks FROM service_requests''').fetchall()
 
 def fetch_service_req(customer_id):
     with get_db() as connection:
