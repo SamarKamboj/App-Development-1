@@ -65,7 +65,7 @@
         <div class="row">
             {% for service in services %}
             <div class="col-md-3 mb-4">
-                <a class="card-link" href="{{ url_for('book_service', serviceID=service['id']) }}">
+                <a class="card-link" href="#">
                     <div class="card square-card">
                         <div class="card-body">
                             <h5 class="card-title">{{ service['name'] }}</h5>
@@ -100,8 +100,8 @@
                                 {{ request['id'] }}</a>
                             {% include 'request_info_modal.html' %}
                         </td>
-                        <td>{{ request['date_of_request'] }}</td>
-                        <td>{{ request['date_of_completion'] }}</td>
+                        <td>{{ request['request_date'] }}</td>
+                        <td>{{ request['completion_date'] }}</td>
                         <td>{{ request['status'] }}</td>
                         <td>{{ request['rating'] }}</td>
                     </tr>
