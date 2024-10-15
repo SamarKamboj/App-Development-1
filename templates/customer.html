@@ -22,19 +22,24 @@
             margin-bottom: 0;
         }
 
-        .card-links {
-            display: flex;
-            justify-content: space-around;
-        }
-
         .square-card {
-            height: 250px;
+            height: 210px;
         }
 
-        a {
+        .card-link {
             text-decoration: none;
             color: inherit;
         }
+
+        .card-link:hover {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .container {
+            max-width: 80%;
+        }
+
     </style>
 </head>
 
@@ -60,23 +65,51 @@
         <div class="row">
             {% for service in services %}
             <div class="col-md-3 mb-4">
-                <div class="card square-card">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ service['name'] }}</h5>
-                        <p><strong>Rs </strong>{{ service['price'] }}</p>
-                        <div class="card-links">
-                            <button type="button" class="btn btn-primary" data-toggle="modal"
-                                data-target="#serviceInfoModal{{ service['id'] }}">Details</button>
-                            {% include 'service_info_modal.html' %}
-                            <a href="#" class="btn btn-outline-secondary">Book</a>
+                <a class="card-link" href="{{ url_for('book_service', serviceID=service['id']) }}">
+                    <div class="card square-card">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ service['name'] }}</h5>
+                            <p><strong>Rs </strong>{{ service['price'] }}</p>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
             {% endfor %}
         </div>
     </div>
-
+    <!-- Service Requests -->
+    <div class="container mt-5 text-center">
+        <h2>Service History</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Request Date</th>
+                        <th>Completion Date</th>
+                        <th>Status</th>
+                        <th>Rating</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for request in requests %}
+                    <tr>
+                        <td>
+                            <a href="" data-toggle="modal"
+                                data-target="#requestInfoModal{{ request['id'] }}">
+                                {{ request['id'] }}</a>
+                            {% include 'request_info_modal.html' %}
+                        </td>
+                        <td>{{ request['date_of_request'] }}</td>
+                        <td>{{ request['date_of_completion'] }}</td>
+                        <td>{{ request['status'] }}</td>
+                        <td>{{ request['rating'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>

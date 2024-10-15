@@ -89,7 +89,6 @@ def admin():
     if request.method == "POST":
         ...
     else:
-        # Ensure the user is logged in and the session matches the URL username
         if "username" in session and "password" in session:
             admin = helper.fetch_admin(username=session["username"],
                                         password=session["password"])
@@ -129,13 +128,9 @@ def customer_homepage():
             services = helper.fetch_services()
             service_requests = helper.fetch_service_req(customer_id=customer['id'])
             return render_template("customer.html", customer=customer, services=services,
-                                   service_requests=service_requests)
+                                   requests=service_requests)
         else:
             return redirect(url_for("login"))
-        
-@app.route("/customer/search", methods=["GET", "POST"])
-def customer_search():
-    ...
         
 @app.route("/professional", methods=["GET", "POST"])
 def professional_homepage():

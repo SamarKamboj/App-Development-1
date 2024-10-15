@@ -136,3 +136,8 @@ def fetch_service_req(customer_id):
     with get_db() as connection:
         db = connection.cursor()
         return db.execute("SELECT * FROM service_requests WHERE customer_id = ?", (customer_id,)).fetchall()
+
+def available_packages(service_id):
+    with get_db() as connection:
+        db = connection.cursor()
+        return db.execute("SELECT * FROM professionals where service_id = ?", (service_id,))
