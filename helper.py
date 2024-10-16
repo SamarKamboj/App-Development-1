@@ -128,19 +128,39 @@ def fetch_service_requests():
     with get_db() as connection:
         db = connection.cursor()
         return db.execute('''SELECT id, service_id, customer_id, professional_id,
-                          DATE(date_of_request) as request_date, TIME(date_of_request) as request_time,
-                          DATE(date_of_completion) as completion_date, TIME(date_of_completion) as completion_time,
+                          DATE(datetime(date_of_request), 'localtime') as request_date, TIME(datetime(date_of_request), 'localtime') as request_time,
+                          DATE(datetime(date_of_completion), 'localtime') as completion_date, TIME(datetime(date_of_completion), 'localtime') as completion_time,
                           status, rating, remarks FROM service_requests''').fetchall()
 
 def fetch_service_req(customer_id):
     with get_db() as connection:
         db = connection.cursor()
         return db.execute('''SELECT id, service_id, customer_id, professional_id,
-                          DATE(date_of_request) as request_date, TIME(date_of_request) as request_time,
-                          DATE(date_of_completion) as completion_date, TIME(date_of_completion) as completion_time,
+                          DATE(datetime(date_of_request), 'localtime') as request_date, TIME(datetime(date_of_request), 'localtime') as request_time,
+                          DATE(datetime(date_of_completion), 'localtime') as completion_date, TIME(datetime(date_of_completion), 'localtime') as completion_time,
                           status, rating, remarks FROM service_requests WHERE customer_id = (SELECT id FROM customers WHERE email = ?)''', (customer_id,)).fetchall()
     
 def available_packages(service_id):
     with get_db() as connection:
         db = connection.cursor()
         return db.execute("SELECT * FROM professionals where service_id = ?", (service_id,))
+
+def book_service(customer_email, professional_id):
+    with get_db() as connection:
+        db = connection.cursor()
+        db.execute('''
+            INSERT INTO service_requests (service_id, customer_id, professional_id)
+            VALUES ((SELECT service_id FROM professionals WHERE id = ?),
+            (SELECT id FROM customers WHERE email = ?),
+            ?)''',
+            (professional_id, customer_email, professional_id))
+        connection.commit()
+
+def close_service(id, rating, remarks):
+    with get_db() as connection:
+        db = connection.cursor()
+        if not remarks:
+            remarks = None
+        db.execute("UPDATE service_requests SET status = 'closed', date_of_completion = CURRENT_TIMESTAMP, rating = ?, remarks = ? WHERE id = ?", (rating, remarks, id))
+        connection.commit()
+    ...

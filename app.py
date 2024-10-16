@@ -140,6 +140,16 @@ def customer_homepage():
         else:
             return redirect(url_for("login"))
         
+@app.route("/book/<int:prof_id>", methods=['POST'])
+def book_service(prof_id):
+    helper.book_service(customer_email=session['username'], professional_id=prof_id)
+    return redirect(url_for("customer_homepage"))
+
+@app.route("/close/<int:id>", methods=['POST'])
+def close_service(id):
+    helper.close_service(id=id, rating=request.form.get('rating'), remarks=request.form.get('remarks'))
+    return redirect(url_for("customer_homepage"))
+
 @app.route("/professional", methods=["GET", "POST"])
 def professional_homepage():
     if request.method == "POST":
@@ -218,8 +228,6 @@ def block_unblock(user, id):
     else:
         return redirect(url_for("login"))
 
-
-
 @app.route("/delete/<user>/<int:id>", methods=["GET", "POST"])
 def delete(user, id):    
     if get_admin():
@@ -231,8 +239,6 @@ def delete(user, id):
             return redirect(url_for("admin"))
     else:
         return redirect(url_for("login"))
-
-
 
 @app.route("/logout", methods=["GET", "POST"])
 def logout():

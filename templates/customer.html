@@ -62,27 +62,6 @@
         </ul>
     </nav>
 
-    <!-- Service Card -->
-    <div class="container mt-5">
-        <div class="row">
-            {% for service in services %}
-            <div class="col-md-3 mb-4">
-                <form method="POST" action="/customer">
-                    <input type="hidden" name="service_id" value="{{ service['id'] }}">
-                    <button type="submit" class="card-link" style="border:none; background:none; padding:0;">
-                        <div class="card square-card">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ service['name'] }}</h5>
-                                <p><strong>Rs </strong>{{ service['price'] }}</p>
-                            </div>
-                        </div>
-                    </button>
-                </form>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-
     {% if packages %}
     <!-- Available Packages -->
     <div class="container mt-5 text-center">
@@ -107,7 +86,11 @@
                         <td>{{ package["experience"] }}</td>
                         <td>{{ package["contact_number"] }}</td>
                         <td>{{ package["rating"] }}</td>
-                        <td>Book</td>
+                        <td>
+                            <form action="{{ url_for('book_service', prof_id=package['id']) }}" method="post">
+                                <button type="submit" class="btn btn-primary btn-sm">Book</button>
+                            </form>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -115,6 +98,27 @@
         </div>
     </div>
     {% endif %}
+
+    <!-- Service Card -->
+    <div class="container mt-5">
+        <div class="row">
+            {% for service in services %}
+            <div class="col-md-3 mb-4">
+                <form method="POST" action="/customer">
+                    <input type="hidden" name="service_id" value="{{ service['id'] }}">
+                    <button type="submit" class="card-link" style="border:none; background:none; padding:0;">
+                        <div class="card square-card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ service['name'] }}</h5>
+                                <p><strong>Rs </strong>{{ service['price'] }}</p>
+                            </div>
+                        </div>
+                    </button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 
     <!-- Service Requests -->
     <div class="container mt-5 text-center">
@@ -141,7 +145,17 @@
                         </td>
                         <td>{{ request['request_date'] }}</td>
                         <td>{{ request['completion_date'] }}</td>
-                        <td>{{ request['status'] }}</td>
+                        <td>
+                            {% if request['status'] == 'accepted' %}
+                            <!-- Close Modal Trigger -->
+                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#closeServiceModal{{ request['id'] }}">
+                                Close it?
+                            </button>
+                            {% include 'close_service_modal.html' %}
+                            {% else %}
+                                {{ request['status'] }}
+                            {% endif %}
+                        </td>
                         <td>{{ request['rating'] }}</td>
                     </tr>
                     {% endfor %}
