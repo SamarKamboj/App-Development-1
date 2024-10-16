@@ -118,6 +118,12 @@ def admin_search():
 @app.route("/customer", methods=["GET", "POST"])
 def customer_homepage():
     if request.method == "POST":
+        customer = helper.fetch_customer(email=session["username"], password=session["password"])
+        services = helper.fetch_services()
+        packages = helper.available_packages(request.form.get("service_id"))
+        service_requests = helper.fetch_service_req(customer_id=session['username'])
+        return render_template("customer.html", customer=customer, services=services,
+                                requests=service_requests, packages=packages)
         ...
     else:
         if "username" in session and "password" in session:
@@ -128,9 +134,9 @@ def customer_homepage():
 
         if customer:
             services = helper.fetch_services()
-            service_requests = helper.fetch_service_req(customer_id=customer['id'])
+            service_requests = helper.fetch_service_req(customer_id=session['username'])
             return render_template("customer.html", customer=customer, services=services,
-                                   requests=service_requests)
+                                   requests=service_requests, packages=None)
         else:
             return redirect(url_for("login"))
         

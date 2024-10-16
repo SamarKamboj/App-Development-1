@@ -29,11 +29,13 @@
         .card-link {
             text-decoration: none;
             color: inherit;
+            width: 210px;
         }
 
         .card-link:hover {
             text-decoration: none;
             color: inherit;
+            cursor: pointer;
         }
 
         .container {
@@ -65,18 +67,55 @@
         <div class="row">
             {% for service in services %}
             <div class="col-md-3 mb-4">
-                <a class="card-link" href="#">
-                    <div class="card square-card">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ service['name'] }}</h5>
-                            <p><strong>Rs </strong>{{ service['price'] }}</p>
+                <form method="POST" action="/customer">
+                    <input type="hidden" name="service_id" value="{{ service['id'] }}">
+                    <button type="submit" class="card-link" style="border:none; background:none; padding:0;">
+                        <div class="card square-card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ service['name'] }}</h5>
+                                <p><strong>Rs </strong>{{ service['price'] }}</p>
+                            </div>
                         </div>
-                    </div>
-                </a>
+                    </button>
+                </form>
             </div>
             {% endfor %}
         </div>
     </div>
+
+    {% if packages %}
+    <!-- Available Packages -->
+    <div class="container mt-5 text-center">
+        <h2>Available Packages</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Experience</th>
+                        <th>Contact Number</th>
+                        <th>Rating</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for package in packages %}
+                    <tr>
+                        <td>{{ package["fname"] + ' ' + package["lname"] }}</td>
+                        <td>{{ package["description"] }}</td>
+                        <td>{{ package["experience"] }}</td>
+                        <td>{{ package["contact_number"] }}</td>
+                        <td>{{ package["rating"] }}</td>
+                        <td>Book</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+
     <!-- Service Requests -->
     <div class="container mt-5 text-center">
         <h2>Service History</h2>
