@@ -132,13 +132,18 @@ def fetch_service_requests():
                           DATE(datetime(date_of_completion), 'localtime') as completion_date, TIME(datetime(date_of_completion), 'localtime') as completion_time,
                           status, rating, remarks FROM service_requests''').fetchall()
 
-def fetch_service_req(customer_id):
+def fetch_service_req(customer_id=None, professional_id=None):
     with get_db() as connection:
         db = connection.cursor()
-        return db.execute('''SELECT id, service_id, customer_id, professional_id,
-                          DATE(datetime(date_of_request), 'localtime') as request_date, TIME(datetime(date_of_request), 'localtime') as request_time,
-                          DATE(datetime(date_of_completion), 'localtime') as completion_date, TIME(datetime(date_of_completion), 'localtime') as completion_time,
-                          status, rating, remarks FROM service_requests WHERE customer_id = (SELECT id FROM customers WHERE email = ?)''', (customer_id,)).fetchall()
+        if customer_id:
+            return db.execute('''SELECT id, service_id, customer_id, professional_id,
+                            DATE(datetime(date_of_request), 'localtime') as request_date, TIME(datetime(date_of_request), 'localtime') as request_time,
+                            DATE(datetime(date_of_completion), 'localtime') as completion_date, TIME(datetime(date_of_completion), 'localtime') as completion_time,
+                            status, rating, remarks FROM service_requests WHERE customer_id = (SELECT id FROM customers WHERE email = ?)''', (customer_id,)).fetchall()
+        elif professional_id:
+            requested_services = db.execute("SELECT * FROM service_requests WHERE professional_id = ? AND status = 'requested'", (professional_id,))
+            closed_services = db.execute("SELECT * FROM service_requests WHERE professional_id = ? AND status = 'closed'", (professional_id,))
+            return (requested_services, closed_services)
     
 def available_packages(service_id):
     with get_db() as connection:

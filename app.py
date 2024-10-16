@@ -161,8 +161,8 @@ def professional_homepage():
         else:
             professional = None
 
-        # Ensure the user is logged in and the session matches the URL username
-        if professional and 'username' in session and session['username'] == professional["email"]:
+        if professional:
+            requested_services, closed_services = helper.fetch_service_req(professional_id=professional['id'])
             return render_template("professional.html", professional=professional)
         else:
             return redirect(url_for("login"))
