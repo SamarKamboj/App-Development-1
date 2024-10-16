@@ -32,7 +32,7 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>Service ID</th>
                         <th>Customer Name</th>
                         <th>Contact Number</th>
                         <th>Address</th>
@@ -64,14 +64,14 @@
         </div>
     </div>
 
-    <!-- Closed Requests -->
+    <!-- Pending Requests -->
     <div class="container mt-5 text-center">
-        <h2>Closed Services</h2>
+        <h2>Pending Services</h2>
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>Service ID</th>
                         <th>Customer Name</th>
                         <th>Contact Number</th>
                         <th>Address</th>
@@ -80,7 +80,37 @@
                 </thead>
                 <tbody>
                     {% for request in requests %}
-                    {% if request['request_status'] == 'closed' %}
+                    {% if request['request_status'] == 'accepted' %}
+                    <tr>
+                        <td>{{ request['id'] }}</td>
+                        <td>{{ request['customer_fname'] + ' ' + request['customer_lname'] }}</td>
+                        <td>{{ request['customer_number'] }}</td>
+                        <td>{{ request['customer_address'] }}</td>
+                        <td>{{ request['request_status'] }}</td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- Closed Requests -->
+    <div class="container mt-5 text-center">
+        <h2>Closed Services</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Service ID</th>
+                        <th>Customer Name</th>
+                        <th>Contact Number</th>
+                        <th>Address</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for request in requests %}
+                    {% if request['request_status'] == 'closed' or request['request_status'] == 'rejected' %}
                     <tr>
                         <td>{{ request['id'] }}</td>
                         <td>{{ request['customer_fname'] + ' ' + request['customer_lname'] }}</td>
