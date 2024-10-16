@@ -1,0 +1,72 @@
+<!-- Modal -->
+<div class="modal fade" id="closeServiceModal{{ request['id'] }}" tabindex="-1" aria-labelledby="feedbackModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="feedbackModalLabel">Feedback</h5>
+            </div>
+            <div class="modal-body">
+                <form class="mt-4" id="close-service" action="{{ url_for('close_service', id=request['id']) }}"
+                    method="post">
+                    <div class="mb-3">
+                        <p>Service Rating</p>
+                        <div class="star-rating">
+                            <input type="radio" id="star5" name="rating" value="5" />
+                            <label for="star5">★</label>
+                            <input type="radio" id="star4" name="rating" value="4" />
+                            <label for="star4">★</label>
+                            <input type="radio" id="star3" name="rating" value="3" />
+                            <label for="star3">★</label>
+                            <input type="radio" id="star2" name="rating" value="2" />
+                            <label for="star2">★</label>
+                            <input type="radio" id="star1" name="rating" value="1" />
+                            <label for="star1">★</label>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="feedbackInput" class="form-label">Remarks (if any)</label>
+                        <textarea class="form-control" id="feedbackInput" name="remarks" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" id="cancel" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="submit" id="send" class="btn btn-primary" form="close-service">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    #cancel, #send {
+        margin-left: 20px;
+        margin-right: 20px;
+        width: 30%;
+    }
+
+    .star-rating {
+        direction: rtl;
+        font-size: 2rem;
+        unicode-bidi: bidi-override;
+        display: inline-block;
+    }
+
+    .star-rating input[type="radio"] {
+        display: none;
+    }
+
+    .star-rating label {
+        color: #ccc;
+        cursor: pointer;
+    }
+
+    .star-rating input[type="radio"]:checked~label {
+        color: #f5b301;
+    }
+
+    .star-rating label:hover,
+    .star-rating label:hover~label {
+        color: #f5b301;
+    }
+</style>
