@@ -150,10 +150,12 @@ def close_service(id):
     helper.close_service(id=id, rating=request.form.get('rating'), remarks=request.form.get('remarks'))
     return redirect(url_for("customer_homepage"))
 
+# @app.route("/professional/<int:service_id>", methods=["POST"])
 @app.route("/professional", methods=["GET", "POST"])
-def professional_homepage():
+def professional_homepage(service_id=None):
     if request.method == "POST":
-        ...
+        helper.accept_reject_service(action=request.form.get('action'), service_id=request.form.get("service_id"))
+        return redirect("/professional")
     else:
         if "username" in session and "password" in session:
             professional = helper.fetch_professional(email=session["username"],
@@ -162,8 +164,8 @@ def professional_homepage():
             professional = None
 
         if professional:
-            requested_services, closed_services = helper.fetch_service_req(professional_id=professional['id'])
-            return render_template("professional.html", professional=professional)
+            requests = helper.fetch_service_req(professional_id=professional['id'])
+            return render_template("professional.html", professional=professional, requests=requests)
         else:
             return redirect(url_for("login"))
 

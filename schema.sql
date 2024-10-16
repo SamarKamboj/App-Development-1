@@ -54,7 +54,7 @@ CREATE TABLE "service_requests" (
     "professional_id" INTEGER NOT NULL,
     "date_of_request" DATETIME DEFAULT CURRENT_TIMESTAMP,
     "date_of_completion" DATETIME,
-    "status" TEXT DEFAULT 'requested' CHECK("status" in ('requested', 'accepted', 'closed')),
+    "status" TEXT DEFAULT 'requested' CHECK("status" in ('requested', 'accepted', 'rejected', 'closed')),
     "rating" INTEGER,
     "remarks" TEXT,
     PRIMARY KEY("id"),

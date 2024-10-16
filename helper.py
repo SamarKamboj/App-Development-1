@@ -141,14 +141,15 @@ def fetch_service_req(customer_id=None, professional_id=None):
                             DATE(datetime(date_of_completion), 'localtime') as completion_date, TIME(datetime(date_of_completion), 'localtime') as completion_time,
                             status, rating, remarks FROM service_requests WHERE customer_id = (SELECT id FROM customers WHERE email = ?)''', (customer_id,)).fetchall()
         elif professional_id:
-            requested_services = db.execute("SELECT * FROM service_requests WHERE professional_id = ? AND status = 'requested'", (professional_id,))
-            closed_services = db.execute("SELECT * FROM service_requests WHERE professional_id = ? AND status = 'closed'", (professional_id,))
-            return (requested_services, closed_services)
+            return db.execute('''SELECT sr.id as id, sr.status as request_status, c.fname as customer_fname, c.lname as customer_lname, c.contact_number as customer_number, c.address as customer_address, c.pincode
+                            FROM service_requests sr, customers c, professionals p
+                            WHERE sr.customer_id = c.id AND sr.professional_id = p.id AND p.id = ?''', (professional_id,)).fetchall()
+
     
 def available_packages(service_id):
     with get_db() as connection:
         db = connection.cursor()
-        return db.execute("SELECT * FROM professionals where service_id = ?", (service_id,))
+        return db.execute("SELECT * FROM professionals where service_id = ?", (service_id,)).fetchall()
 
 def book_service(customer_email, professional_id):
     with get_db() as connection:
@@ -169,3 +170,9 @@ def close_service(id, rating, remarks):
         db.execute("UPDATE service_requests SET status = 'closed', date_of_completion = CURRENT_TIMESTAMP, rating = ?, remarks = ? WHERE id = ?", (rating, remarks, id))
         connection.commit()
     ...
+
+def accept_reject_service(service_id, action):
+    with get_db() as connection:
+        db = connection.cursor()
+        db.execute("UPDATE service_requests SET status = ? WHERE id = ?", (action, service_id))
+        connection.commit()

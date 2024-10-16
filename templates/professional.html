@@ -24,6 +24,77 @@
             </li>
         </ul>
     </nav>
+
+    <!-- New Requests -->
+    <div class="container mt-5 text-center">
+        <h2>New Services</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Customer Name</th>
+                        <th>Contact Number</th>
+                        <th>Address</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for request in requests %}
+                    {% if request['request_status'] == 'requested' %}
+                    <tr>
+                        <td>{{ request['id'] }}</td>
+                        <td>{{ request['customer_fname'] + ' ' + request['customer_lname'] }}</td>
+                        <td>{{ request['customer_number'] }}</td>
+                        <td>{{ request['customer_address'] }}</td>
+                        <td>
+                            <form action="{{ url_for('professional_homepage') }}" method="post">
+                                <input type="hidden" name="service_id" value="{{request['id']}}">
+                                <button class="btn btn-outline-success btn-sm" type="submit" value="accepted"
+                                    name="action">Accept</button>
+                                <button class="btn btn-outline-danger btn-sm" type="submit" value="rejected"
+                                    name="action">Reject</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Closed Requests -->
+    <div class="container mt-5 text-center">
+        <h2>Closed Services</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Customer Name</th>
+                        <th>Contact Number</th>
+                        <th>Address</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for request in requests %}
+                    {% if request['request_status'] == 'closed' %}
+                    <tr>
+                        <td>{{ request['id'] }}</td>
+                        <td>{{ request['customer_fname'] + ' ' + request['customer_lname'] }}</td>
+                        <td>{{ request['customer_number'] }}</td>
+                        <td>{{ request['customer_address'] }}</td>
+                        <td>{{ request['request_status'] }}</td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
         crossorigin="anonymous"></script>
