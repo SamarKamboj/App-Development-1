@@ -9,6 +9,14 @@ if not os.path.exists("database.db") or not os.path.getsize("database.db"):
 app = Flask(__name__)
 app.secret_key = "0987654321"
 
+def get_admin():
+    if "username" in session and "password" in session:
+        return helper.fetch_admin(username=session["username"],
+                                    password=session["password"])
+    else:
+        return None
+
+
 @app.route("/")
 def index():
     return redirect("/login")
@@ -89,13 +97,7 @@ def admin():
     if request.method == "POST":
         ...
     else:
-        if "username" in session and "password" in session:
-            admin = helper.fetch_admin(username=session["username"],
-                                        password=session["password"])
-        else:
-            admin = None
-        
-        if admin:
+        if get_admin():
             professionals = helper.fetch_professionals()
             customers = helper.fetch_customers()
             services = helper.fetch_services()
@@ -151,14 +153,8 @@ def professional_homepage():
 
 @app.route("/service/<path:subpath>", methods=["POST"])
 @app.route("/service/<path:subpath>/<int:id>", methods=["POST"])
-def service(subpath, id=None):
-    if "username" in session and "password" in session:
-        admin = helper.fetch_admin(username=session["username"],
-                                    password=session["password"])
-    else:
-        admin = None
-    
-    if admin:
+def service(subpath, id=None):  
+    if get_admin():
         if subpath == 'add':
             name = request.form.get("name")
             description = request.form.get("description")
@@ -179,13 +175,7 @@ def service(subpath, id=None):
 
 @app.route("/accept_reject/<int:id>", methods=["GET", "POST"])
 def accept_reject(id):
-    if "username" in session and "password" in session:
-        admin = helper.fetch_admin(username=session["username"],
-                                    password=session["password"])
-    else:
-        admin = None
-    
-    if admin:
+    if get_admin():
         if request.form.get("action") == "accept":
             helper.update_prof_status(status='active', id=id)
             return redirect(url_for("admin"))
@@ -195,14 +185,8 @@ def accept_reject(id):
         return redirect(url_for("login"))
     
 @app.route("/block_unblock/<user>/<int:id>", methods=["GET", "POST"])
-def block_unblock(user, id):
-    if "username" in session and "password" in session:
-        admin = helper.fetch_admin(username=session["username"],
-                                    password=session["password"])
-    else:
-        admin = None
-    
-    if admin:
+def block_unblock(user, id):    
+    if get_admin():
         if user == 'professional' and id:
             if request.form.get("action") == 'block':
                 helper.update_prof_status(status='block', id=id)
@@ -231,14 +215,8 @@ def block_unblock(user, id):
 
 
 @app.route("/delete/<user>/<int:id>", methods=["GET", "POST"])
-def delete(user, id):
-    if "username" in session and "password" in session:
-        admin = helper.fetch_admin(username=session["username"],
-                                    password=session["password"])
-    else:
-        admin = None
-    
-    if admin:
+def delete(user, id):    
+    if get_admin():
         if user == 'professional' and id:
             helper.delete_professional(id=id)
             return redirect(url_for("admin"))
