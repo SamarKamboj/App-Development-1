@@ -46,7 +46,7 @@ def fetch_customer(email, password):
 def fetch_customers():
     with get_db() as connection:
         db = connection.cursor()
-        return db.execute("SELECT * FROM customers ORDER BY status").fetchall()
+        return db.execute("SELECT * FROM customers ORDER BY status, id, fname, lname").fetchall()
     
 def delete_customer(id):
     with get_db() as connection:
@@ -79,7 +79,7 @@ def fetch_professional(email=None, password=None, id=None):
 def fetch_professionals():
     with get_db() as connection:
         db = connection.cursor()
-        return db.execute("SELECT * FROM professionals ORDER BY status, date_created").fetchall()
+        return db.execute("SELECT * FROM professionals ORDER BY status, id, fname, lname").fetchall()
         
 def update_prof_status(status, id):
     with get_db() as connection:

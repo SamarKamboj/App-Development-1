@@ -155,23 +155,31 @@
                                     <td>{{ customer["email"] }}</td>
                                     <td>
                                         {% if customer['status'] == 'active' %}
-                                        <form
-                                            action="{{ url_for('block_unblock', user='customer', id=customer['id']) }}"
-                                            method="post">
-                                            <button class="btn btn-outline-secondary btn-sm" type="submit" value="block"
-                                                name="action">Block</button>
-                                            <button class="btn btn-outline-danger btn-sm" type="submit" value="remove"
-                                                name="action">Remove</button>
-                                        </form>
+                                        <div class="button-group">
+                                            <form action="/admin/block/customer/{{ customer['id'] }}"
+                                                method="post">
+                                                <button class="btn btn-outline-secondary btn-sm" type="submit"
+                                                    value="block" name="action">Block</button>
+                                            </form>
+                                            <form action="/admin/delete/customer/{{ customer['id'] }}"
+                                                method="post">
+                                                <button class="btn btn-outline-danger btn-sm" type="submit"
+                                                    value="remove" name="action">Remove</button>
+                                            </form>
+                                        </div>
                                         {% elif customer['status'] == 'block' %}
-                                        <form
-                                            action="{{ url_for('block_unblock', user='customer', id=customer['id']) }}"
-                                            method="post">
-                                            <button class="btn btn-outline-secondary btn-sm" type="submit"
-                                                value="unblock" name="action">Unblock</button>
-                                            <button class="btn btn-outline-danger btn-sm" type="submit" value="remove"
-                                                name="action">Remove</button>
-                                        </form>
+                                        <div class="button-group">
+                                            <form action="/admin/unblock/customer/{{ customer['id'] }}"
+                                                method="post">
+                                                <button class="btn btn-outline-secondary btn-sm" type="submit"
+                                                    value="unblock" name="action">Unblock</button>
+                                            </form>
+                                            <form action="/admin/delete/customer/{{ customer['id'] }}"
+                                                method="post">
+                                                <button class="btn btn-outline-danger btn-sm" type="submit"
+                                                    value="remove" name="action">Remove</button>
+                                            </form>
+                                        </div>
                                         {% endif %}
                                     </td>
                                 </tr>
@@ -250,31 +258,44 @@
                                     <td>{{ professional["rating"] }}</td>
                                     <td>
                                         {% if professional['status'] == None %}
-                                        <form action="{{ url_for('accept_reject', id=professional['id']) }}"
-                                            method="post">
-                                            <button class="btn btn-outline-success btn-sm" type="submit" value="accept"
+                                        <div class="button-group">
+                                            <form action="/admin/accept/professional/{{ professional['id'] }}"
+                                                method="post">
+                                                <button class="btn btn-outline-success btn-sm" type="submit" value="accept"
                                                 name="action">Accept</button>
-                                            <button class="btn btn-outline-danger btn-sm" type="submit" value="reject"
+                                            </form>
+                                            <form action="/admin/delete/professional/{{ professional['id'] }}"
+                                                method="post">
+                                                <button class="btn btn-outline-danger btn-sm" type="submit" value="reject"
                                                 name="action">Reject</button>
-                                        </form>
+                                            </form>
+                                        </div>
                                         {% elif professional['status'] == 'active' %}
-                                        <form
-                                            action="{{ url_for('block_unblock', user='professional', id=professional['id']) }}"
-                                            method="post">
-                                            <button class="btn btn-outline-secondary btn-sm" type="submit" value="block"
-                                                name="action">Block</button>
-                                            <button class="btn btn-outline-danger btn-sm" type="submit" value="remove"
-                                                name="action">Remove</button>
-                                        </form>
+                                        <div class="button-group">
+                                            <form action="/admin/block/professional/{{ professional['id'] }}"
+                                                method="post">
+                                                <button class="btn btn-outline-secondary btn-sm" type="submit"
+                                                    value="block" name="action">Block</button>
+                                            </form>
+                                            <form action="/admin/delete/professional/{{ professional['id'] }}"
+                                                method="post">
+                                                <button class="btn btn-outline-danger btn-sm" type="submit"
+                                                    value="remove" name="action">Remove</button>
+                                            </form>
+                                        </div>
                                         {% elif professional['status'] == 'block' %}
-                                        <form
-                                            action="{{ url_for('block_unblock', user='professional', id=professional['id']) }}"
-                                            method="post">
-                                            <button class="btn btn-outline-secondary btn-sm" type="submit"
-                                                value="unblock" name="action">Unblock</button>
-                                            <button class="btn btn-outline-danger btn-sm" type="submit" value="remove"
-                                                name="action">Remove</button>
-                                        </form>
+                                        <div class="button-group">
+                                            <form action="/admin/unblock/professional/{{ professional['id'] }}"
+                                                method="post">
+                                                <button class="btn btn-outline-secondary btn-sm" type="submit"
+                                                    value="unblock" name="action">Unblock</button>
+                                            </form>
+                                            <form action="/admin/delete/professional/{{ professional['id'] }}"
+                                                method="post">
+                                                <button class="btn btn-outline-danger btn-sm" type="submit"
+                                                    value="remove" name="action">Remove</button>
+                                            </form>
+                                        </div>
                                         {% endif %}
                                     </td>
                                 </tr>

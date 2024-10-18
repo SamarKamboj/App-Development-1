@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, session, url_for
+from flask import Flask, render_template, redirect, request, session, url_for, flash
 import helper
 import os
 
@@ -35,6 +35,7 @@ def login():
                 session["password"] = password
                 return redirect(url_for("admin"))
             else:
+                flash("Invalid credentials", 'error')
                 return redirect("/login")
         elif login_type == "service_professional":
             professional = helper.fetch_professional(email=email, password=password)
@@ -43,6 +44,7 @@ def login():
                 session["password"] = password
                 return redirect(url_for("professional_homepage"))
             else:
+                flash("Invalid credentials", 'error')
                 return redirect("/login")
         elif login_type == "customer":
             customer = helper.fetch_customer(email=email, password=password)
@@ -51,6 +53,7 @@ def login():
                 session["password"] = password
                 return redirect(url_for("customer_homepage"))
             else:
+                flash("Invalid credentials", 'error')
                 return redirect("/login")
     else:
         return render_template("login.html")
@@ -67,6 +70,7 @@ def customer_signup():
         password = request.form.get("password")
         helper.add_customer(fname=fname, lname=lname, address=address, pincode=pincode,
                             contact_number=contact_number, email=email, password=password)
+        flash("Successfully signed up!", 'success')
         return redirect("/login")
     else:
         return render_template("customer_signup.html")
@@ -88,32 +92,69 @@ def professional_signup():
                                 address=address, pincode=pincode, service_id=service,
                                 experience=experience, description=description,
                                 contact_number=contact_number)
+        flash("Successfully signed up!", 'success')
         return redirect("/login")
     else:
         return render_template("professional_signup.html", services=helper.fetch_services())
 
 @app.route("/admin", methods=["GET", "POST"])
-def admin():
+@app.route("/admin/<action>/<user_type>/<int:id>", methods=["POST"])
+def admin(action=None, user_type=None, id=None):
     if request.method == "POST":
+        if action == 'delete':
+            if user_type == 'professional' and id:
+                helper.delete_professional(id=id)
+                return redirect(url_for("admin"))
+            elif user_type == 'customer' and id:
+                helper.delete_customer(id=id)
+                return redirect(url_for("admin"))
+            else:
+                flash("Process failed!", 'error')
+                return redirect(url_for("login"))
+        elif action == 'block':
+            if user_type == 'professional' and id:
+                helper.update_prof_status(status='block', id=id)
+                return redirect(url_for("admin"))
+            elif user_type == 'customer' and id:
+                helper.update_customer_status(status='block', id=id)
+                return redirect(url_for("admin"))
+            else:
+                flash("Process failed!", 'error')
+                return redirect(url_for("login"))
+        elif action == 'unblock':
+            if user_type == 'professional' and id:
+                helper.update_prof_status(status='active', id=id)
+                return redirect(url_for("admin"))
+            elif user_type == 'customer' and id:
+                helper.update_customer_status(status='active', id=id)
+                return redirect(url_for("admin"))
+            else:
+                flash("Process failed!", 'error')
+                return redirect(url_for("login"))
+        elif action == 'accept' and user_type == 'professional' and id:
+            helper.update_prof_status(status='active', id=id)
+            return redirect(url_for("admin"))
+        else:
+            flash("Process failed!", 'error')
+            return redirect(url_for("login"))
+            ...
         ...
-    else:
-        if get_admin():
+    if "username" in session and "password" in session:
+        admin = helper.fetch_admin(username=session["username"],
+                                    password=session["password"])
+        if admin:
             professionals = helper.fetch_professionals()
             customers = helper.fetch_customers()
             services = helper.fetch_services()
             service_requests = helper.fetch_service_requests()
             return render_template("admin.html", professionals=professionals, customers=customers,
-                                   services=services, requests=service_requests)
+                                    services=services, requests=service_requests)
         else:
+            flash("Invalid credentials", 'error')
             return redirect(url_for("login"))
-        
-@app.route("/admin/search", methods=["GET", "POST"])
-def admin_search():
-    if request.method == "POST":
-        ...
     else:
-        return render_template("admin_search.html")
-    ...
+        flash("Invalid credentials", 'error')
+        return redirect(url_for("login"))
 
 @app.route("/customer", methods=["GET", "POST"])
 def customer_homepage():
@@ -124,21 +165,24 @@ def customer_homepage():
         service_requests = helper.fetch_service_req(customer_id=session['username'])
         return render_template("customer.html", customer=customer, services=services,
                                 requests=service_requests, packages=packages)
-        ...
-    else:
-        if "username" in session and "password" in session:
-            customer = helper.fetch_customer(email=session["username"],
-                                            password=session["password"])
-        else:
-            customer = None
-
-        if customer:
+    
+    if "username" in session and "password" in session:
+        customer = helper.fetch_customer(email=session["username"],
+                                        password=session["password"])
+        if customer and customer['status'] == 'active':
             services = helper.fetch_services()
             service_requests = helper.fetch_service_req(customer_id=session['username'])
             return render_template("customer.html", customer=customer, services=services,
-                                   requests=service_requests, packages=None)
-        else:
+                                requests=service_requests, packages=None)
+        elif customer and customer['status'] == 'block':
+            flash("You are currently blocked!", 'error')
             return redirect(url_for("login"))
+        else:
+            flash("Invalid credentials", 'error')
+            return redirect(url_for("login"))
+    else:
+        flash("Invalid credentials", 'error')
+        return redirect(url_for("login"))
         
 @app.route("/book/<int:prof_id>", methods=['POST'])
 def book_service(prof_id):
@@ -150,24 +194,30 @@ def close_service(id):
     helper.close_service(id=id, rating=request.form.get('rating'), remarks=request.form.get('remarks'))
     return redirect(url_for("customer_homepage"))
 
-# @app.route("/professional/<int:service_id>", methods=["POST"])
 @app.route("/professional", methods=["GET", "POST"])
 def professional_homepage(service_id=None):
     if request.method == "POST":
         helper.accept_reject_service(action=request.form.get('action'), service_id=request.form.get("service_id"))
         return redirect("/professional")
-    else:
-        if "username" in session and "password" in session:
-            professional = helper.fetch_professional(email=session["username"],
-                                                    password=session["password"])
-        else:
-            professional = None
-
-        if professional:
+    
+    if "username" in session and "password" in session:
+        professional = helper.fetch_professional(email=session["username"],
+                                                password=session["password"])
+        if professional and professional['status'] == 'active':
             requests = helper.fetch_service_req(professional_id=professional['id'])
             return render_template("professional.html", professional=professional, requests=requests)
-        else:
+        elif professional and professional['status'] == None:
+            flash("Your request to become a professional is pending!", 'pending')
             return redirect(url_for("login"))
+        elif professional and professional['status'] == 'block':
+            flash("You are currently blocked!", 'error')
+            return redirect(url_for("login"))
+        else:
+            flash("Invalid credentials", 'error')
+            return redirect(url_for("login"))
+    else:
+        flash("Invalid credentials", 'error')
+        return redirect(url_for("login"))
 
 @app.route("/service/<path:subpath>", methods=["POST"])
 @app.route("/service/<path:subpath>/<int:id>", methods=["POST"])
@@ -187,57 +237,6 @@ def service(subpath, id=None):
             return redirect(url_for("admin"))
         elif subpath == 'delete' and id:
             helper.delete_service(id=id)
-            return redirect(url_for("admin"))
-    else:
-        return redirect(url_for("login"))
-
-@app.route("/accept_reject/<int:id>", methods=["GET", "POST"])
-def accept_reject(id):
-    if get_admin():
-        if request.form.get("action") == "accept":
-            helper.update_prof_status(status='active', id=id)
-            return redirect(url_for("admin"))
-        else:
-            return redirect(url_for("delete", user='professional', id=id))
-    else:
-        return redirect(url_for("login"))
-    
-@app.route("/block_unblock/<user>/<int:id>", methods=["GET", "POST"])
-def block_unblock(user, id):    
-    if get_admin():
-        if user == 'professional' and id:
-            if request.form.get("action") == 'block':
-                helper.update_prof_status(status='block', id=id)
-                return redirect(url_for("admin"))
-            elif request.form.get("action") == 'unblock':
-                helper.update_prof_status(status='active', id=id)
-                return redirect(url_for("admin"))
-            elif request.form.get("action") == 'remove':
-                return redirect(url_for("delete", user='professional', id=id))
-            else:
-                return redirect(url_for("admin"))
-        elif user == 'customer' and id:
-            if request.form.get("action") == 'block':
-                helper.update_customer_status(status='block', id=id)
-                return redirect(url_for("admin"))
-            elif request.form.get("action") == 'unblock':
-                helper.update_customer_status(status='active', id=id)
-                return redirect(url_for("admin"))
-            elif request.form.get("action") == 'remove':
-                return redirect(url_for("delete", user='customer', id=id))
-            else:
-                return redirect(url_for("admin"))
-    else:
-        return redirect(url_for("login"))
-
-@app.route("/delete/<user>/<int:id>", methods=["GET", "POST"])
-def delete(user, id):    
-    if get_admin():
-        if user == 'professional' and id:
-            helper.delete_professional(id=id)
-            return redirect(url_for("admin"))
-        elif user == 'customer' and id:
-            helper.delete_customer(id=id)
             return redirect(url_for("admin"))
     else:
         return redirect(url_for("login"))
