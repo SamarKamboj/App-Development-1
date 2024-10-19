@@ -149,7 +149,7 @@ def fetch_service_req(customer_id=None, professional_id=None):
 def available_packages(service_id):
     with get_db() as connection:
         db = connection.cursor()
-        return db.execute("SELECT * FROM professionals where service_id = ?", (service_id,)).fetchall()
+        return db.execute("SELECT * FROM professionals where service_id = ? AND status = 'active'", (service_id,)).fetchall()
 
 def book_service(customer_email, professional_id):
     with get_db() as connection:
@@ -168,6 +168,9 @@ def close_service(id, rating, remarks):
         if not remarks:
             remarks = None
         db.execute("UPDATE service_requests SET status = 'closed', date_of_completion = CURRENT_TIMESTAMP, rating = ?, remarks = ? WHERE id = ?", (rating, remarks, id))
+        
+        prof_id = (db.execute("SELECT professional_id FROM service_requests WHERE id = ?", (id,)).fetchone())[0]
+        db.execute("UPDATE professionals SET rating = (SELECT AVG(rating) FROM service_requests WHERE professional_id = ?) WHERE id = ?", (prof_id, prof_id))
         connection.commit()
     ...
 
