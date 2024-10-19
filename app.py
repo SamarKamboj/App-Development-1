@@ -184,12 +184,12 @@ def customer_homepage():
         flash("Invalid credentials", 'error')
         return redirect(url_for("login"))
         
-@app.route("/book/<int:prof_id>", methods=['POST'])
+@app.route("/customer/book/<int:prof_id>", methods=['POST'])
 def book_service(prof_id):
     helper.book_service(customer_email=session['username'], professional_id=prof_id)
     return redirect(url_for("customer_homepage"))
 
-@app.route("/close/<int:id>", methods=['POST'])
+@app.route("/customer/close/<int:id>", methods=['POST'])
 def close_service(id):
     helper.close_service(id=id, rating=request.form.get('rating'), remarks=request.form.get('remarks'))
     return redirect(url_for("customer_homepage"))
