@@ -194,8 +194,38 @@ def close_service(id):
     helper.close_service(id=id, rating=request.form.get('rating'), remarks=request.form.get('remarks'))
     return redirect(url_for("customer_homepage"))
 
+@app.route("/<user_type>/edit", methods=["POST"])
+def edit_profile(user_type):
+    if user_type == 'professional':
+        professional_info = {
+            'id': request.form.get("id"),
+            'fname': request.form.get("fname"),
+            'lname': request.form.get("lname"),
+            'address': request.form.get("address"),
+            'pincode': request.form.get("pincode"),
+            'contact_number': request.form.get("contact_number"),
+            'service_id': request.form.get("service"),
+            'experience': request.form.get("experience"),
+            'description': request.form.get("description"),
+        }
+        helper.update_profile(user='professional', user_info=professional_info)
+        flash("Profile updated successfully!", 'success')
+        return redirect(url_for("professional_homepage"))
+    elif user_type == 'customer':
+        customer_info = {
+            'id': request.form.get("id"),
+            'fname': request.form.get("fname"),
+            'lname': request.form.get("lname"),
+            'address': request.form.get("address"),
+            'pincode': request.form.get("pincode"),
+            'contact_number': request.form.get("contact_number")
+        }
+        helper.update_profile(user='customer', user_info=customer_info)
+        flash("Profile updated successfully!", 'success')
+        return redirect(url_for("customer_homepage"))
+
 @app.route("/professional", methods=["GET", "POST"])
-def professional_homepage(service_id=None):
+def professional_homepage():
     if request.method == "POST":
         helper.accept_reject_service(action=request.form.get('action'), service_id=request.form.get("service_id"))
         return redirect("/professional")
@@ -205,7 +235,8 @@ def professional_homepage(service_id=None):
                                                 password=session["password"])
         if professional and professional['status'] == 'active':
             requests = helper.fetch_service_req(professional_id=professional['id'])
-            return render_template("professional.html", professional=professional, requests=requests)
+            return render_template("professional.html", professional=professional, requests=requests,
+                                   services=helper.fetch_services())
         elif professional and professional['status'] == None:
             flash("Your request to become a professional is pending!", 'pending')
             return redirect(url_for("login"))

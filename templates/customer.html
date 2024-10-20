@@ -42,6 +42,20 @@
             max-width: 80%;
         }
 
+        .success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+
+        .form-container {
+            margin: 5vh;
+        }
+        
+        .alert {
+            margin-bottom: 0px;
+        }
+        
     </style>
 </head>
 
@@ -53,6 +67,7 @@
                 <a class="nav-link" href="" data-toggle="modal"
                     data-target="#customerModal{{ customer['id'] }}">Profile</a>
                 {% include 'customer_info_modal.html' %}
+                {% include 'customer_profile_modal.html' %}
             </li>
             <li>
                 <form action="/logout" class="d-inline">
@@ -62,6 +77,20 @@
         </ul>
     </nav>
 
+    <div class="form-container d-flex justify-content-center align-items-center">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-dismissible fade show {{ category }}" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
     {% if packages %}
     <!-- Available Packages -->
     <div class="container mt-5 text-center">

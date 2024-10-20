@@ -179,3 +179,19 @@ def accept_reject_service(service_id, action):
         db = connection.cursor()
         db.execute("UPDATE service_requests SET status = ? WHERE id = ?", (action, service_id))
         connection.commit()
+
+def update_profile(user, user_info):
+    with get_db() as connection:
+        db = connection.cursor()
+        if user == 'professional':
+            db.execute('''UPDATE professionals SET fname = ?, lname = ?, address = ?, pincode = ?,
+                       contact_number = ?, service_id = ?, experience = ?, description = ?
+                       WHERE id = ?''',
+                       (user_info['fname'], user_info['lname'], user_info['address'],
+                        user_info['pincode'], user_info['contact_number'], user_info['service_id'],
+                        user_info['experience'], user_info['description'], user_info['id']))
+        elif user == 'customer':
+            db.execute("UPDATE customers SET fname = ?, lname = ?, address = ?, pincode = ?, contact_number = ? WHERE id = ?",
+                       (user_info['fname'], user_info['lname'], user_info['address'],
+                        user_info['pincode'], user_info['contact_number'], user_info['id']))
+        connection.commit()
