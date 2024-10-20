@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, request, session, url_for, f
 import helper
 import os
 
-# Create a database if it does not exist or if it doesn't have the required schema (empty)
+# Create a database if it does not exist or if it doesn't have the required schema (it's empty)
 if not os.path.exists("database.db") or not os.path.getsize("database.db"):
     helper.create_database()
 
@@ -274,10 +274,6 @@ So to prevent it, I added this after_request decorator
 """
 @app.after_request
 def add_header(response):
-    """
-    Add headers to both force a fresh reload and prevent browser caching
-    of sensitive pages.
-    """
     response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '-1'
@@ -285,6 +281,5 @@ def add_header(response):
 
 
 if __name__ == "__main__":
-    app.run(
-        debug=True
-    )
+    app.run(debug=True)
+    
