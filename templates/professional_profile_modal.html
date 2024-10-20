@@ -51,9 +51,12 @@
                         <div class="form-group col-md-8">
                             <label for="services">Available Services</label>
                             <select class="form-control" id="services" name="service" required>
-                                <option value="" disabled selected>Select a service...</option>
                                 {% for service in services %}
+                                {% if service['id'] == professional['service_id'] %}
+                                <option value="{{ service['id'] }}" selected>{{ service['name'] }}</option>
+                                {% else %}
                                 <option value="{{ service['id'] }}">{{ service['name'] }}</option>
+                                {% endif %}
                                 {% endfor %}
                             </select>
                         </div>
