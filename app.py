@@ -9,13 +9,6 @@ if not os.path.exists("database.db") or not os.path.getsize("database.db"):
 app = Flask(__name__)
 app.secret_key = "0987654321"
 
-def get_admin():
-    if "username" in session and "password" in session:
-        return helper.fetch_admin(username=session["username"],
-                                    password=session["password"])
-    else:
-        return None
-
 
 @app.route("/")
 def index():
@@ -253,24 +246,21 @@ def professional_homepage():
 @app.route("/service/<path:subpath>", methods=["POST"])
 @app.route("/service/<path:subpath>/<int:id>", methods=["POST"])
 def service(subpath, id=None):  
-    if get_admin():
-        if subpath == 'add':
-            name = request.form.get("name")
-            description = request.form.get("description")
-            price = request.form.get("price")
-            helper.add_service(name=name, description=description, price=price)
-            return redirect(url_for("admin"))
-        elif subpath == 'update' and id:
-            updated_name = request.form.get("edit_name")
-            updated_description = request.form.get("edit_description")
-            updated_price = request.form.get("edit_price")
-            helper.update_service(id=id, name=updated_name, description=updated_description, price=updated_price)
-            return redirect(url_for("admin"))
-        elif subpath == 'delete' and id:
-            helper.delete_service(id=id)
-            return redirect(url_for("admin"))
-    else:
-        return redirect(url_for("login"))
+    if subpath == 'add':
+        name = request.form.get("name")
+        description = request.form.get("description")
+        price = request.form.get("price")
+        helper.add_service(name=name, description=description, price=price)
+        return redirect(url_for("admin"))
+    elif subpath == 'update' and id:
+        updated_name = request.form.get("edit_name")
+        updated_description = request.form.get("edit_description")
+        updated_price = request.form.get("edit_price")
+        helper.update_service(id=id, name=updated_name, description=updated_description, price=updated_price)
+        return redirect(url_for("admin"))
+    elif subpath == 'delete' and id:
+        helper.delete_service(id=id)
+        return redirect(url_for("admin"))
 
 @app.route("/logout", methods=["GET", "POST"])
 def logout():
