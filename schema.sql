@@ -4,9 +4,6 @@ CREATE TABLE "admins" (
     PRIMARY KEY("username")
 );
 
-INSERT OR IGNORE INTO "admins"
-VALUES ('admin', 'admin');
-
 CREATE TABLE "services" (
     "id" INTEGER,
     "name" TEXT NOT NULL UNIQUE,
@@ -62,3 +59,6 @@ CREATE TABLE "service_requests" (
     FOREIGN KEY("customer_id") REFERENCES "customers"("id") ON DELETE CASCADE,
     FOREIGN KEY("professional_id") REFERENCES "professionals"("id") ON DELETE CASCADE
 );
+
+INSERT OR IGNORE INTO "admins"
+VALUES ('admin', 'admin');
