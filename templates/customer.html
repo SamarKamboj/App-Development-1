@@ -102,6 +102,7 @@
                         <th>Experience</th>
                         <th>Contact Number</th>
                         <th>Rating</th>
+                        <th>Price</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -113,6 +114,7 @@
                         <td>{{ package["experience"] }}</td>
                         <td>{{ package["contact_number"] }}</td>
                         <td>{{ package["rating"] }}</td>
+                        <td>{{ package["service_price"] }}</td>
                         <td>
                             <form action="{{ url_for('book_service', prof_id=package['id']) }}" method="post">
                                 <button type="submit" class="btn btn-primary btn-sm">Book</button>
@@ -137,7 +139,6 @@
                         <div class="card square-card">
                             <div class="card-body">
                                 <h5 class="card-title">{{ service['name'] }}</h5>
-                                <p><strong>Rs </strong>{{ service['price'] }}</p>
                             </div>
                         </div>
                     </button>
