@@ -79,12 +79,13 @@ def professional_signup():
         email = request.form.get("email")
         password = request.form.get("password")
         service = request.form.get("service")
+        service_price = request.form.get("service_price")
         experience = request.form.get("experience")
         description = request.form.get("description")
         helper.add_professional(fname=fname, lname=lname, email=email, password=password,
                                 address=address, pincode=pincode, service_id=service,
                                 experience=experience, description=description,
-                                contact_number=contact_number)
+                                contact_number=contact_number, price=service_price)
         flash("Successfully signed up!", 'success')
         return redirect("/login")
     else:
@@ -200,6 +201,7 @@ def edit_profile(user_type):
             'pincode': request.form.get("pincode"),
             'contact_number': request.form.get("contact_number"),
             'service_id': request.form.get("service"),
+            'service_price': request.form.get("service_price"),
             'experience': request.form.get("experience"),
             'description': request.form.get("description"),
         }

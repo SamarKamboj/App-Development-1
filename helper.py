@@ -54,13 +54,13 @@ def delete_customer(id):
         db.execute("DELETE FROM customers WHERE id = ?", (id,))
         connection.commit()
 
-def add_professional(fname, lname, email, password, service_id, experience, address, pincode, description, contact_number):
+def add_professional(fname, lname, email, password, service_id, experience, address, pincode, description, contact_number, price):
     with get_db() as connection:
         db = connection.cursor()
         if service_id:
-            db.execute('''INSERT INTO professionals (fname, lname, email, password, service_id, experience, address, pincode, description, contact_number)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
-                (fname, lname, email, password, service_id, experience, address, pincode, description, contact_number)
+            db.execute('''INSERT INTO professionals (fname, lname, email, password, service_id, service_price, experience, address, pincode, description, contact_number)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
+                (fname, lname, email, password, service_id, price, experience, address, pincode, description, contact_number)
             )
             connection.commit()
         else:
@@ -185,10 +185,11 @@ def update_profile(user, user_info):
         db = connection.cursor()
         if user == 'professional':
             db.execute('''UPDATE professionals SET fname = ?, lname = ?, address = ?, pincode = ?,
-                       contact_number = ?, service_id = ?, experience = ?, description = ?
+                       contact_number = ?, service_id = ?, service_price = ?, experience = ?, description = ?
                        WHERE id = ?''',
                        (user_info['fname'], user_info['lname'], user_info['address'],
-                        user_info['pincode'], user_info['contact_number'], user_info['service_id'],
+                        user_info['pincode'], user_info['contact_number'],
+                        user_info['service_id'], user_info['service_price'],
                         user_info['experience'], user_info['description'], user_info['id']))
         elif user == 'customer':
             db.execute("UPDATE customers SET fname = ?, lname = ?, address = ?, pincode = ?, contact_number = ? WHERE id = ?",

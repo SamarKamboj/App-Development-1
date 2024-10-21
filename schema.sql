@@ -8,7 +8,7 @@ CREATE TABLE "services" (
     "id" INTEGER,
     "name" TEXT NOT NULL UNIQUE,
     "description" TEXT NOT NULL,
-    "price" REAL NOT NULL,
+    "base_price" REAL NOT NULL,
     PRIMARY KEY("id")
 );
 
@@ -22,6 +22,7 @@ CREATE TABLE "professionals" (
     "email" TEXT NOT NULL UNIQUE,
     "password" TEXT NOT NULL,
     "service_id" INTEGER NOT NULL,
+    "service_price" REAL NOT NULL,
     "experience" INTEGER NOT NULL,
     "description" TEXT NOT NULL,
     "date_created" DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -63,7 +64,7 @@ CREATE TABLE "service_requests" (
 INSERT OR IGNORE INTO "admins"
 VALUES ('admin', 'admin');
 
-INSERT OR IGNORE INTO "services" ("name", "description", "price")
+INSERT OR IGNORE INTO "services" ("name", "description", "base_price")
 VALUES ('Saloon', 'We provide best hair cut for men and women in the market at a very low price.',199.99),
 ('Cleaning', 'We provide cleaning of toilets at a very low price', 999),
 ('Cook', "Cooks are a need in today's life where both men and women go to work. Our active customers trust us the most. Price below is per month.", 2199);
