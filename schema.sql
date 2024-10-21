@@ -62,3 +62,8 @@ CREATE TABLE "service_requests" (
 
 INSERT OR IGNORE INTO "admins"
 VALUES ('admin', 'admin');
+
+INSERT OR IGNORE INTO "services" ("name", "description", "price")
+VALUES ('Saloon', 'We provide best hair cut for men and women in the market at a very low price.',199.99),
+('Cleaning', 'We provide cleaning of toilets at a very low price', 599),
+('Cook', "Cooks are a need in today's life where both men and women go to work. Our active customers trust us the most. Price below is per month.", 1299.5);
