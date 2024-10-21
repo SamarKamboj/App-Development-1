@@ -162,6 +162,7 @@
                                                     value="block" name="action">Block</button>
                                             </form>
                                             <form action="/admin/delete/customer/{{ customer['id'] }}"
+                                            onsubmit="return confirm('Are you sure you want to remove this customer?');"
                                                 method="post">
                                                 <button class="btn btn-outline-danger btn-sm" type="submit"
                                                     value="remove" name="action">Remove</button>
@@ -175,6 +176,7 @@
                                                     value="unblock" name="action">Unblock</button>
                                             </form>
                                             <form action="/admin/delete/customer/{{ customer['id'] }}"
+                                            onsubmit="return confirm('Are you sure you want to remove this customer?');"
                                                 method="post">
                                                 <button class="btn btn-outline-danger btn-sm" type="submit"
                                                     value="remove" name="action">Remove</button>
@@ -265,6 +267,7 @@
                                                 name="action">Accept</button>
                                             </form>
                                             <form action="/admin/delete/professional/{{ professional['id'] }}"
+                                            onsubmit="return confirm('Are you sure you want to remove this professional?');"
                                                 method="post">
                                                 <button class="btn btn-outline-danger btn-sm" type="submit" value="reject"
                                                 name="action">Reject</button>
@@ -278,6 +281,7 @@
                                                     value="block" name="action">Block</button>
                                             </form>
                                             <form action="/admin/delete/professional/{{ professional['id'] }}"
+                                            onsubmit="return confirm('Are you sure you want to remove this professional?');"
                                                 method="post">
                                                 <button class="btn btn-outline-danger btn-sm" type="submit"
                                                     value="remove" name="action">Remove</button>
@@ -291,6 +295,7 @@
                                                     value="unblock" name="action">Unblock</button>
                                             </form>
                                             <form action="/admin/delete/professional/{{ professional['id'] }}"
+                                            onsubmit="return confirm('Are you sure you want to remove this professional?');"
                                                 method="post">
                                                 <button class="btn btn-outline-danger btn-sm" type="submit"
                                                     value="remove" name="action">Remove</button>
