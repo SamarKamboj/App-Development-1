@@ -180,11 +180,13 @@ def customer_homepage():
 @app.route("/customer/book/<int:prof_id>", methods=['POST'])
 def book_service(prof_id):
     helper.book_service(customer_email=session['username'], professional_id=prof_id)
+    flash("Service booking done successfully!", 'success')
     return redirect(url_for("customer_homepage"))
 
 @app.route("/customer/close/<int:id>", methods=['POST'])
 def close_service(id):
     helper.close_service(id=id, rating=request.form.get('rating'), remarks=request.form.get('remarks'))
+    flash("Service closed successfully!", 'success')
     return redirect(url_for("customer_homepage"))
 
 @app.route("/<user_type>/edit", methods=["POST"])
@@ -221,6 +223,10 @@ def edit_profile(user_type):
 def professional_homepage():
     if request.method == "POST":
         helper.accept_reject_service(action=request.form.get('action'), service_id=request.form.get("service_id"))
+        if request.form.get("action") == 'accepted':
+            flash("Service accepted!", 'success')
+        else:
+            flash("Service rejected!", 'error')
         return redirect("/professional")
     
     if "username" in session and "password" in session:
