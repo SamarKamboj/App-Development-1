@@ -20,7 +20,7 @@
         .alert {
             margin-bottom: 0px;
         }
-
+        
     </style>
 </head>
 
@@ -29,10 +29,9 @@
         <h1>Welcome, {{ professional["fname"] }}</h1>
         <ul class="nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" href="" data-toggle="modal"
-                    data-target="#professionalModal{{ professional['id'] }}">Profile</a>
-                {% include 'professional_info_modal.html' %}
-                {% include 'professional_profile_modal.html' %}
+                <a class="nav-link" href="" data-toggle="modal" data-target="#profileModal">Profile</a>
+                {% include 'profile.html' %}
+                {% include 'edit_profile.html' %}
             </li>
             <li>
                 <form action="/logout" class="d-inline">
@@ -166,6 +165,18 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
+    <script>
+        // jQuery to handle closing the current modal and opening the new one
+        $('.edit-btn').on('click', function () {
+            var targetModal = $(this).data('target');  // Get the target modal from data-target attribute
+
+            // Close the current modal
+            $(this).closest('.modal').modal('hide').on('hidden.bs.modal', function () {
+                // After the current modal is fully hidden, open the new modal
+                $(targetModal).modal('show');
+            });
+        });
+    </script>
 </body>
 
 </html>

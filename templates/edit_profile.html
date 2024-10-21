@@ -1,4 +1,65 @@
-<!-- Modal Trigger -->
+{% if customer %}
+<div class="modal fade" id="customerModal" tabindex="-1" role="dialog" aria-labelledby="customerModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="customerModalLabel">Edit Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editProfile" action="{{ url_for('edit_profile', user_type='customer') }}"
+                    method="post">
+                    <!-- Name -->
+                    <input type="hidden" name="id" value="{{ customer['id'] }}">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="firstName">First Name</label>
+                            <input autofocus autocomplete="on" type="text" class="form-control" id="firstName"
+                                name="fname" value="{{ customer['fname'] }}">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="lastName">Last Name</label>
+                            <input autocomplete="on" type="text" class="form-control" id="lastName" name="lname"
+                                value="{{ customer['lname'] }}">
+                        </div>
+                    </div>
+                    <!-- Address -->
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <label for="inputAddress">Address</label>
+                            <input autocomplete="on" type="text" class="form-control" id="address" name="address"
+                                value="{{ customer['address'] }}">
+                        </div>
+                    </div>
+                    <!-- Contact Number and Pincode -->
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="pincode">Pin Code</label>
+                            <input autocomplete="on" type="number" class="form-control" id="pincode" name="pincode"
+                                value="{{ customer['pincode'] }}">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="contact_number">Contact Number</label>
+                            <input autocomplete="on" type="number" class="form-control" id="contact_number"
+                                name="contact_number" value="{{ customer['contact_number'] }}">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="form form-group">
+                    <button type="submit" class="btn btn-primary" form="editProfile">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% elif professional %}
+
 <div class="modal fade" id="professionalModal" tabindex="-1" role="dialog" aria-labelledby="professionalModalLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -80,3 +141,5 @@
         </div>
     </div>
 </div>
+
+{% endif %}
