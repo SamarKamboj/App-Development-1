@@ -141,14 +141,37 @@ def admin(action=None, user_type=None, id=None):
             customers = helper.fetch_customers()
             services = helper.fetch_services()
             service_requests = helper.fetch_service_requests()
-            return render_template("admin.html", professionals=professionals, customers=customers,
-                                    services=services, requests=service_requests)
+            return render_template("admin.html", professionals=professionals, customers=customers, services=services, requests=service_requests)
         else:
             flash("Invalid credentials", 'error')
             return redirect(url_for("login"))
     else:
         flash("Invalid credentials", 'error')
         return redirect(url_for("login"))
+    
+@app.route("/admin/search", methods=["GET", "POST"])
+def admin_search():
+    if "username" in session and "password" in session:
+        admin = helper.fetch_admin(username=session["username"],
+                                    password=session["password"])
+        if admin:
+            return render_template("admin_search.html")      
+        else:
+            flash("Invalid credentials", 'error')
+            return redirect(url_for("login"))
+    else:
+        flash("Invalid credentials", 'error')
+        return redirect(url_for("login"))
+
+@app.route("/search")
+def search():
+    query = request.args.get("q")
+    if query:
+        results = helper.search_results(user='admin', query=query)
+    else:
+        results = {}
+    print(results)
+    return render_template("search_service.html", results=results)
 
 @app.route("/customer", methods=["GET", "POST"])
 def customer_homepage():
@@ -257,7 +280,7 @@ def service(subpath, id=None):
     if subpath == 'add':
         name = request.form.get("name")
         description = request.form.get("description")
-        price = request.form.get("price")
+        price = request.form.get("base_price")
         helper.add_service(name=name, description=description, price=price)
         return redirect(url_for("admin"))
     elif subpath == 'update' and id:

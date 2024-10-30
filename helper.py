@@ -102,14 +102,14 @@ def delete_professional(id):
 def add_service(name, description, price):
     with get_db() as connection:
         db = connection.cursor()
-        db.execute("INSERT INTO services (name, description, price) VALUES (?, ?, ROUND(?, 2))",
+        db.execute("INSERT INTO services (name, description, base_price) VALUES (?, ?, ROUND(?, 2))",
                    (name, description, price))
         connection.commit()
 
 def update_service(id, name, description, price):
     with get_db() as connection:
         db = connection.cursor()
-        db.execute("UPDATE services SET name = ?, description = ?, price = ? WHERE id = ?",
+        db.execute("UPDATE services SET name = ?, description = ?, base_price = ? WHERE id = ?",
                    (name, description, price, id))
         connection.commit()
 
@@ -196,3 +196,15 @@ def update_profile(user, user_info):
                        (user_info['fname'], user_info['lname'], user_info['address'],
                         user_info['pincode'], user_info['contact_number'], user_info['id']))
         connection.commit()
+
+def search_results(user, query):
+    query = '%' + query + '%'
+    with get_db() as connection:
+        db = connection.cursor()
+        return {
+            'services': db.execute("SELECT * FROM services WHERE name LIKE ? OR description LIKE ?", (query, query)).fetchall(),
+            'customers': db.execute("SELECT * FROM customers WHERE fname LIKE ? OR lname LIKE ? OR address LIKE ? OR email LIKE ? OR status LIKE ?", (query, query, query, query, query)).fetchall(),
+            'professionals': db.execute("SELECT * FROM professionals WHERE fname LIKE ? OR lname LIKE ? OR address LIKE ? OR email LIKE ? OR status LIKE ? OR description LIKE ?", (query, query, query, query, query, query)).fetchall(),
+            'service_requests': db.execute("SELECT * FROM service_requests WHERE date_of_request LIKE ? OR date_of_completion LIKE ? OR status LIKE ? OR rating LIKE ? OR remarks LIKE ?", (query, query, query, query, query)).fetchall()
+        }
+    ...
