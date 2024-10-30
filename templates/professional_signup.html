@@ -100,7 +100,7 @@
                     <select class="form-control" id="services" name="service" required>
                         <option value="" disabled selected>Select a service...</option>
                         {% for service in services %}
-                        <option value="{{ service['id'] }}">{{ service['name'] }}</option>
+                        <option value="{{ service['id'] }}">{{ service['name'] }}:- min@{{ service['base_price'] }}</option>
                         {% endfor %}
                     </select>
                 </div>
