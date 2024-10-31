@@ -161,6 +161,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% if 'requests' in results %}
                     {% for request in results.requests %}
                     <tr>
                         <td>{{ request['id'] }}</td>
@@ -170,11 +171,75 @@
                         <td>{{ request['request_status'] }}</td>
                     </tr>
                     {% endfor %}
+                    {% endif %}
                 </tbody>
             </table>
         </div>
     </div>
 {% elif user == 'customer' %}
 
+    <!-- Services -->
+    <div class="form-container mt-5 text-center">
+        <h2>Services</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Service Name</th>
+                        <th>Base Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if 'services' in results %}
+                    {% for service in results.services %}
+                    <tr>
+                        <td>
+                            <a href="" data-toggle="modal" data-target="#serviceInfoModal{{ service['id'] }}">{{
+                                service['id'] }}</a>
+                            {% include 'service_info_modal.html' %}
+                        </td>
+                        <td>{{ service["name"] }}</td>
+                        <td>{{ service["base_price"] }}</td>
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Packages -->
+    <div class="container mt-5 text-center">
+        <h2>Available Packages</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Experience</th>
+                        <th>Contact Number</th>
+                        <th>Rating</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if 'packages' in results %}
+                    {% for package in results.packages %}
+                    <tr>
+                        <td>{{ package["fname"] + ' ' + package["lname"] }}</td>
+                        <td>{{ package["description"] }}</td>
+                        <td>{{ package["experience"] }}</td>
+                        <td>{{ package["contact_number"] }}</td>
+                        <td>{{ package["rating"] }}</td>
+                        <td>{{ package["service_price"] }}</td>
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 
 {% endif %}

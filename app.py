@@ -208,6 +208,20 @@ def customer_homepage():
     else:
         flash("Invalid credentials", 'error')
         return redirect(url_for("login"))
+    
+@app.route("/customer/search")
+def customer_search():
+    if "username" in session and "password" in session:
+        customer = helper.fetch_customer(email=session["username"],
+                                    password=session["password"])
+        if customer:
+            return render_template("customer_search.html", id=customer['id'])      
+        else:
+            flash("Invalid credentials", 'error')
+            return redirect(url_for("login"))
+    else:
+        flash("Invalid credentials", 'error')
+        return redirect(url_for("login"))
         
 @app.route("/customer/book/<int:prof_id>", methods=['POST'])
 def book_service(prof_id):

@@ -214,5 +214,9 @@ def search_results(user, id, query):
                             FROM service_requests sr, customers c
                             WHERE sr.customer_id = c.id AND sr.professional_id = ? AND (customer_fname LIKE ? OR customer_lname LIKE ? OR customer_number LIKE ? OR customer_address LIKE ? OR request_status LIKE ?)''', (id, query, query, query, query, query)).fetchall()
             }
+        elif user == 'customer' and id:
+            return {
+                'services': db.execute("SELECT * FROM services WHERE name LIKE ? OR description LIKE ?", (query, query)).fetchall(),
+                'packages': db.execute("SELECT * FROM professionals WHERE (fname LIKE ? OR lname LIKE ? OR description LIKE ? OR contact_number LIKE ? OR rating LIKE ?) AND status = 'active'", (query, query, query, query, query)).fetchall(),
+            }
             ...
-        
