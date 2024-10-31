@@ -197,7 +197,7 @@ def update_profile(user, user_info):
                         user_info['pincode'], user_info['contact_number'], user_info['id']))
         connection.commit()
 
-def search_results(user, id, query):
+def search_results(user, query, id=None):
     query = '%' + query + '%'
     with get_db() as connection:
         db = connection.cursor()
