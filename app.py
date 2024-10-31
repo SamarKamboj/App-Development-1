@@ -163,15 +163,23 @@ def admin_search():
         flash("Invalid credentials", 'error')
         return redirect(url_for("login"))
 
-@app.route("/search")
-def search():
+@app.route("/search/<user>")
+@app.route("/search/<user>/<int:id>")
+def search(user, id=None):
     query = request.args.get("q")
     if query:
-        results = helper.search_results(user='admin', query=query)
+        if user == 'admin':
+            results = helper.search_results(user='admin', query=query)
+        elif user == 'professional':
+            results = helper.search_results(user='professional', id=id, query=query)
+        elif user == 'customer':
+            results = helper.search_results(user='customer', id=id, query=query)
+        else:
+            results = {}
     else:
         results = {}
     print(results)
-    return render_template("search_service.html", results=results)
+    return render_template("search.html", results=results, user=user)
 
 @app.route("/customer", methods=["GET", "POST"])
 def customer_homepage():
@@ -273,6 +281,21 @@ def professional_homepage():
     else:
         flash("Invalid credentials", 'error')
         return redirect(url_for("login"))
+    
+@app.route("/professional/search", methods=["GET", "POST"])
+def professional_search():
+    if "username" in session and "password" in session:
+        professional = helper.fetch_professional(email=session["username"],
+                                    password=session["password"])
+        if professional:
+            return render_template("professional_search.html", id=professional['id'])      
+        else:
+            flash("Invalid credentials", 'error')
+            return redirect(url_for("login"))
+    else:
+        flash("Invalid credentials", 'error')
+        return redirect(url_for("login"))
+    ...
 
 @app.route("/service/<path:subpath>", methods=["POST"])
 @app.route("/service/<path:subpath>/<int:id>", methods=["POST"])

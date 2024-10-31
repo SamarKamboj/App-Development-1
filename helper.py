@@ -142,8 +142,8 @@ def fetch_service_req(customer_id=None, professional_id=None):
                             status, rating, remarks FROM service_requests WHERE customer_id = (SELECT id FROM customers WHERE email = ?)''', (customer_id,)).fetchall()
         elif professional_id:
             return db.execute('''SELECT sr.id as id, sr.status as request_status, c.fname as customer_fname, c.lname as customer_lname, c.contact_number as customer_number, c.address as customer_address, c.pincode
-                            FROM service_requests sr, customers c, professionals p
-                            WHERE sr.customer_id = c.id AND sr.professional_id = p.id AND p.id = ?''', (professional_id,)).fetchall()
+                            FROM service_requests sr, customers c
+                            WHERE sr.customer_id = c.id AND sr.professional_id = ?''', (professional_id,)).fetchall()
 
     
 def available_packages(service_id):
@@ -197,14 +197,22 @@ def update_profile(user, user_info):
                         user_info['pincode'], user_info['contact_number'], user_info['id']))
         connection.commit()
 
-def search_results(user, query):
+def search_results(user, id, query):
     query = '%' + query + '%'
     with get_db() as connection:
         db = connection.cursor()
-        return {
-            'services': db.execute("SELECT * FROM services WHERE name LIKE ? OR description LIKE ?", (query, query)).fetchall(),
-            'customers': db.execute("SELECT * FROM customers WHERE fname LIKE ? OR lname LIKE ? OR address LIKE ? OR email LIKE ? OR status LIKE ?", (query, query, query, query, query)).fetchall(),
-            'professionals': db.execute("SELECT * FROM professionals WHERE fname LIKE ? OR lname LIKE ? OR address LIKE ? OR email LIKE ? OR status LIKE ? OR description LIKE ?", (query, query, query, query, query, query)).fetchall(),
-            'service_requests': db.execute("SELECT * FROM service_requests WHERE date_of_request LIKE ? OR date_of_completion LIKE ? OR status LIKE ? OR rating LIKE ? OR remarks LIKE ?", (query, query, query, query, query)).fetchall()
-        }
-    ...
+        if user == 'admin':
+            return {
+                'services': db.execute("SELECT * FROM services WHERE name LIKE ? OR description LIKE ?", (query, query)).fetchall(),
+                'customers': db.execute("SELECT * FROM customers WHERE fname LIKE ? OR lname LIKE ? OR address LIKE ? OR email LIKE ? OR status LIKE ?", (query, query, query, query, query)).fetchall(),
+                'professionals': db.execute("SELECT * FROM professionals WHERE fname LIKE ? OR lname LIKE ? OR address LIKE ? OR email LIKE ? OR status LIKE ? OR description LIKE ?", (query, query, query, query, query, query)).fetchall(),
+                'service_requests': db.execute("SELECT * FROM service_requests WHERE date_of_request LIKE ? OR date_of_completion LIKE ? OR status LIKE ? OR rating LIKE ? OR remarks LIKE ?", (query, query, query, query, query)).fetchall()
+            }
+        elif user == 'professional' and id:
+            return {
+                'requests': db.execute('''SELECT sr.id as id, sr.status as request_status, c.fname as customer_fname, c.lname as customer_lname, c.contact_number as customer_number, c.address as customer_address, c.pincode
+                            FROM service_requests sr, customers c
+                            WHERE sr.customer_id = c.id AND sr.professional_id = ? AND (customer_fname LIKE ? OR customer_lname LIKE ? OR customer_number LIKE ? OR customer_address LIKE ? OR request_status LIKE ?)''', (id, query, query, query, query, query)).fetchall()
+            }
+            ...
+        

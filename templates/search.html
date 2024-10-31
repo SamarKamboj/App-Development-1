@@ -1,0 +1,180 @@
+{% if user == 'admin' %}
+    <!-- Services -->
+    <div class="form-container mt-5 text-center">
+        <h2>Services</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Service Name</th>
+                        <th>Base Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if 'services' in results %}
+                    {% for service in results.services %}
+                    <tr>
+                        <td>
+                            <a href="" data-toggle="modal" data-target="#serviceInfoModal{{ service['id'] }}">{{
+                                service['id'] }}</a>
+                            {% include 'service_info_modal.html' %}
+                        </td>
+                        <td>{{ service["name"] }}</td>
+                        <td>{{ service["base_price"] }}</td>
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Customers -->
+    <div class="form-container mt-5 text-center">
+        <h2>Customers</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Contact Number</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if 'customers' in results %}
+                    {% for customer in results.customers %}
+                    <tr>
+                        <td>
+                            <a href="" data-toggle="modal" data-target="#customerModal{{ customer['id'] }}">{{
+                                customer['id'] }}</a>
+                            {% include 'customer_info_modal.html' %}
+                        </td>
+                        <td>{{ customer["fname"] + ' ' + customer["lname"] }}</td>
+                        <td>{{ customer["contact_number"] }}</td>
+                        <td>{{ customer["email"] }}</td>
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Professionals -->
+    <div class="form-container mt-5 text-center">
+        <h2>Professionals</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Contact Number</th>
+                        <th>Service ID</th>
+                        <th>Rating</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if 'professionals' in results %}
+                    {% for professional in results.professionals %}
+                    <tr>
+                        <td>
+                            <a href="" data-toggle="modal" data-target="#professionalModal{{ professional['id'] }}">{{
+                                professional['id']
+                                }}</a>
+                            {% include 'professional_info_modal.html' %}
+                        </td>
+                        <td>{{ professional["fname"] + ' ' + professional["lname"] }}</td>
+                        <td>{{ professional["contact_number"] }}</td>
+                        <td>{{ professional["service_id"] }}</td>
+                        <td>{{ professional["rating"] }}</td>
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Service Requests -->
+    <div class="form-container mt-5 text-center">
+        <h2>Service Requests</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Request Date</th>
+                        <th>Completion Date</th>
+                        <th>Status</th>
+                        <th>Rating</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if 'service_requests' in results %}
+                    {% for request in results.service_requests %}
+                    <tr>
+                        <td>
+                            <a href="" data-toggle="modal" data-target="#requestInfoModal{{ request['id'] }}">
+                                {{ request['id'] }}</a>
+                            {% include 'request_info_modal.html' %}
+                        </td>
+                        <td>{{ request['date_of_request'] }}</td>
+                        <td>{{ request['date_of_completion'] }}</td>
+                        <td>
+                            {% if request['status'] == 'accepted' %}
+                            <!-- Close Modal Trigger -->
+                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                                data-target="#closeServiceModal{{ request['id'] }}">
+                                Close it?
+                            </button>
+                            {% include 'close_service_modal.html' %}
+                            {% else %}
+                            {{ request['status'] }}
+                            {% endif %}
+                        </td>
+                        <td>{{ request['rating'] }}</td>
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% elif user == 'professional' %}
+    <!-- Service Requests -->
+    <div class="container mt-5 text-center">
+        <h2>Service Requests</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Service ID</th>
+                        <th>Customer Name</th>
+                        <th>Contact Number</th>
+                        <th>Address</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for request in results.requests %}
+                    <tr>
+                        <td>{{ request['id'] }}</td>
+                        <td>{{ request['customer_fname'] + ' ' + request['customer_lname'] }}</td>
+                        <td>{{ request['customer_number'] }}</td>
+                        <td>{{ request['customer_address'] }}</td>
+                        <td>{{ request['request_status'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% elif user == 'customer' %}
+
+
+{% endif %}
