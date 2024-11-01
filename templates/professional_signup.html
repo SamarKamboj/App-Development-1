@@ -84,16 +84,16 @@
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="pincode">Pin Code</label>
-                    <input autocomplete="on" type="number" class="form-control" id="pincode" name="pincode" placeholder="247001" required>
+                    <input autocomplete="on" type="number" class="form-control" id="pincode" min="100000" max="999999" name="pincode" placeholder="247001" required>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="contact_number">Contact Number</label>
-                    <input autocomplete="on" type="number" class="form-control" id="contact_number" name="contact_number"
+                    <input autocomplete="on" type="number" class="form-control" id="contact_number" min="1000000000" max="9999999999" name="contact_number"
                         placeholder="+91" required>
                 </div>
             </div>
 
-            <!-- Experience and Services -->
+            <!-- Services, Price and Experience -->
             <div class="form-row">
                 <div class="form-group col-md-5">
                     <label for="services">Available Services</label>
@@ -119,7 +119,7 @@
             <div class="form-group">
                 <label for="description">Description</label>
                 <textarea autocomplete="off" class="form-control" id="description" name="description" rows="4"
-                    placeholder="Briefly describe your service"></textarea>
+                    placeholder="Briefly describe your service" required></textarea>
             </div>
 
             <!-- Register Button -->

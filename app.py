@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, request, session, url_for, flash
 import helper
 import os
+import re
 
 # Create a database if it does not exist or if it doesn't have the required schema (it's empty)
 if not os.path.exists("database.db") or not os.path.getsize("database.db"):
@@ -61,6 +62,15 @@ def customer_signup():
         contact_number = request.form.get("contact_number")
         email = request.form.get("email")
         password = request.form.get("password")
+
+        if (not fname) or (not address) or (not pincode) or (not contact_number) or (not email) or (not password):
+            flash("Invalid input", 'error')
+            return redirect("/login")
+
+        if len(pincode) != 6 or len(contact_number) != 10 or (not re.fullmatch(r"^[a-z0-9._%+-]+@[a-z]+\.[a-z]{2,}$", email)):
+            flash("Invalid input", 'error')
+            return redirect("/login")
+        
         helper.add_customer(fname=fname, lname=lname, address=address, pincode=pincode,
                             contact_number=contact_number, email=email, password=password)
         flash("Successfully signed up!", 'success')
@@ -82,6 +92,15 @@ def professional_signup():
         service_price = request.form.get("service_price")
         experience = request.form.get("experience")
         description = request.form.get("description")
+
+        if (not fname) or (not address) or (not pincode) or (not contact_number) or (not email) or (not password) or (not service) or (not service_price) or (not experience) or (not description):
+            flash("Invalid input", 'error')
+            return redirect("/login")
+
+        if len(pincode) != 6 or len(contact_number) != 10 or (not re.fullmatch(r"^[a-z0-9._%+-]+@[a-z]+\.[a-z]{2,}$", email)):
+            flash("Invalid input", 'error')
+            return redirect("/login")
+
         helper.add_professional(fname=fname, lname=lname, email=email, password=password,
                                 address=address, pincode=pincode, service_id=service,
                                 experience=experience, description=description,
