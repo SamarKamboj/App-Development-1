@@ -171,13 +171,45 @@
                         <td>
                             <a href="" data-toggle="modal" data-target="#requestInfoModal{{ request['id'] }}">
                                 {{ request['id'] }}</a>
-                            {% include 'request_info_modal.html' %}
+                                <div class="modal fade" id="requestInfoModal{{ request['id'] }}" tabindex="-1" role="dialog" aria-labelledby="requestModalLabel{{ request['id'] }}" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="requestModalLabel{{ request['id'] }}">Details</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p style="text-align: left;"><strong>ID:</strong> {{ request['id'] }}</p>
+                                                {% for service in services %}
+                                                {% if service.id == request['service_id'] %}
+                                                <p style="text-align: left;"><strong>Service Name:</strong> {{ service.name }}</p>
+                                                {% endif %}
+                                                {% endfor %}
+
+                                                {% for professional in professionals %}
+                                                {% if professional.id == request.professional_id %}
+                                                <p style="text-align: left;"><strong>Professional Name:</strong> {{ professional.fname + ' ' + professional.lname }}</p>
+                                                {% endif %}
+                                                {% endfor %}
+
+                                                <p style="text-align: left;"><strong>Request Date:</strong> {{ request['request_date'] }}</p>
+                                                <p style="text-align: left;"><strong>Request Time:</strong> {{ request['request_time'] }}</p>
+                                                <p style="text-align: left;"><strong>Completion Date:</strong> {{ request['completion_date'] }}</p>
+                                                <p style="text-align: left;"><strong>Completion Time:</strong> {{ request['completion_time'] }}</p>
+                                                <p style="text-align: left;"><strong>Status:</strong> {{ request['status'] }}</p>
+                                                <p style="text-align: left;"><strong>Rating:</strong> {{ request['rating'] }}</p>
+                                                <p style="text-align: left;"><strong>Remarks:</strong> {{ request['remarks'] }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                         </td>
                         <td>{{ request['request_date'] }}</td>
                         <td>{{ request['completion_date'] }}</td>
                         <td>
                             {% if request['status'] == 'accepted' %}
-                            <!-- Close Modal Trigger -->
                             <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
                                 data-target="#closeServiceModal{{ request['id'] }}">
                                 Close it?
@@ -204,13 +236,9 @@
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
     <script>
-        // jQuery to handle closing the current modal and opening the new one
         $('.edit-btn').on('click', function () {
-            var targetModal = $(this).data('target');  // Get the target modal from data-target attribute
-
-            // Close the current modal
+            var targetModal = $(this).data('target');
             $(this).closest('.modal').modal('hide').on('hidden.bs.modal', function () {
-                // After the current modal is fully hidden, open the new modal
                 $(targetModal).modal('show');
             });
         });

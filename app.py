@@ -206,9 +206,10 @@ def customer_homepage():
         customer = helper.fetch_customer(email=session["username"], password=session["password"])
         services = helper.fetch_services()
         packages = helper.available_packages(request.form.get("service_id"))
+        professionals = helper.fetch_professionals()
         service_requests = helper.fetch_service_req(customer_id=session['username'])
         return render_template("customer.html", customer=customer, services=services,
-                                requests=service_requests, packages=packages)
+                                requests=service_requests, packages=packages, professionals=professionals)
     
     if "username" in session and "password" in session:
         customer = helper.fetch_customer(email=session["username"],
@@ -216,8 +217,9 @@ def customer_homepage():
         if customer and customer['status'] == 'active':
             services = helper.fetch_services()
             service_requests = helper.fetch_service_req(customer_id=session['username'])
+            professionals = helper.fetch_professionals()
             return render_template("customer.html", customer=customer, services=services,
-                                requests=service_requests, packages=None)
+                                requests=service_requests, packages=None, professionals=professionals)
         elif customer and customer['status'] == 'block':
             flash("You are currently blocked!", 'error')
             return redirect(url_for("login"))

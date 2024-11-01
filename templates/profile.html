@@ -47,7 +47,13 @@
                     professional['address'] }}</p>
                 <p style="text-align: left;"><strong>Pincode:</strong> {{ professional['pincode'] }}</p>
                 <p style="text-align: left;"><strong>Contact Number:</strong> {{ professional['contact_number'] }}</p>
-                <p style="text-align: left;"><strong>Service:</strong> {{ professional['service_id'] }}</p>
+
+                {% for service in services %}
+                {% if service.id == professional['service_id'] %}
+                <p style="text-align: left;"><strong>Service:</strong> {{ service.name }}</p>
+                {% endif %}
+                {% endfor %}
+                
                 <p style="text-align: left;"><strong>Service Price:</strong> {{ professional['service_price'] }}</p>
                 <p style="text-align: left;"><strong>Email:</strong> {{ professional['email'] }}</p>
                 <p style="text-align: left;"><strong>Experience:</strong> {{ professional['experience'] }}</p>
