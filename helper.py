@@ -2,15 +2,15 @@ import sqlite3
 import sys
 
 def get_db():
-    connection = sqlite3.connect("database.db")
+    connection = sqlite3.connect("./instance/database.db")
     connection.execute("PRAGMA foreign_keys = ON")
     connection.row_factory = sqlite3.Row
     return connection
 
 def create_database():
-    connection = sqlite3.connect("database.db")
+    connection = sqlite3.connect("./instance/database.db")
     try:
-        path = "schema.sql"
+        path = "./instance/schema.sql"
         file = open(path)
     except FileNotFoundError:
         sys.exit(f"{path} not found")

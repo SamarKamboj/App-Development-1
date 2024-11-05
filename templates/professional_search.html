@@ -22,6 +22,18 @@
             box-sizing: border-box;
             overflow-x: auto;
         }
+
+        .success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+
+        .error {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
     </style>
 </head>
 
@@ -45,7 +57,7 @@
 
         <div class="form-container">
             <input class="form-control" type="search" placeholder="Search" aria-label="Search" name="q" hx-get="/search/professional/{{id}}"
-                hx-trigger="keyup changed delay:500ms" hx-target="#results">
+                hx-trigger="keyup changed delay:500ms" hx-target="#results" autofocus>
             <div id="results">
 
             </div>

@@ -4,7 +4,7 @@ import os
 import re
 
 # Create a database if it does not exist or if it doesn't have the required schema (it's empty)
-if not os.path.exists("database.db") or not os.path.getsize("database.db"):
+if not os.path.exists("./instance/database.db") or not os.path.getsize("./instance/database.db"):
     helper.create_database()
 
 app = Flask(__name__)
@@ -197,7 +197,18 @@ def search(user, id=None):
             results = {}
     else:
         results = {}
-    print(results)
+
+    # Check if results is empty or not. If it is empty then don't change user otherwise make user None
+    check, count = 0, 0
+    for result in results:
+        count += 1
+        if not results[result]:
+            check += 1
+    if check == count:
+        results, user = {}, None
+
+    if not user and query:
+        flash("No such data found!", 'error')
     return render_template("search.html", results=results, user=user)
 
 @app.route("/customer", methods=["GET", "POST"])
