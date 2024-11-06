@@ -149,7 +149,6 @@ def fetch_service_req(customer_id=None, professional_id=None):
 def available_packages(service_id):
     with get_db() as connection:
         db = connection.cursor()
-        print(service_id)
         return db.execute("SELECT * FROM professionals WHERE service_id = ? AND status = 'active'", (service_id,)).fetchall()
 
 def book_service(customer_email, professional_id):
