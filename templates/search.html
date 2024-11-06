@@ -132,25 +132,10 @@
                     {% if 'service_requests' in results %}
                     {% for request in results.service_requests %}
                     <tr>
-                        <td>
-                            <a href="" data-toggle="modal" data-target="#requestInfoModal{{ request['id'] }}">
-                                {{ request['id'] }}</a>
-                            {% include 'request_info_modal.html' %}
-                        </td>
+                        <td>{{ request['id'] }}</td>
                         <td>{{ request['date_of_request'] }}</td>
                         <td>{{ request['date_of_completion'] }}</td>
-                        <td>
-                            {% if request['status'] == 'accepted' %}
-                            <!-- Close Modal Trigger -->
-                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
-                                data-target="#closeServiceModal{{ request['id'] }}">
-                                Close it?
-                            </button>
-                            {% include 'close_service_modal.html' %}
-                            {% else %}
-                            {{ request['status'] }}
-                            {% endif %}
-                        </td>
+                        <td>{{ request['status'] }}</td>
                         <td>{{ request['rating'] }}</td>
                     </tr>
                     {% endfor %}
