@@ -197,15 +197,15 @@ def update_profile(user, user_info):
                         user_info['pincode'], user_info['contact_number'], user_info['id']))
         connection.commit()
 
-def search_results(user, query, id=None):
-    query = '%' + query + '%'
+def search_results(user:str, query:str, id=None):
+    query = '%' + query.lower() + '%'
     with get_db() as connection:
         db = connection.cursor()
         if user == 'admin':
             return {
                 'services': db.execute("SELECT * FROM services WHERE name LIKE ? OR description LIKE ?", (query, query)).fetchall(),
-                'customers': db.execute("SELECT * FROM customers WHERE fname LIKE ? OR lname LIKE ? OR address LIKE ? OR email LIKE ? OR status LIKE ?", (query, query, query, query, query)).fetchall(),
-                'professionals': db.execute("SELECT * FROM professionals WHERE fname LIKE ? OR lname LIKE ? OR address LIKE ? OR email LIKE ? OR status LIKE ? OR description LIKE ?", (query, query, query, query, query, query)).fetchall(),
+                'customers': db.execute("SELECT * FROM customers WHERE fname LIKE ? OR lname LIKE ? OR address LIKE ? OR email LIKE ? OR status LIKE ? OR contact_number LIKE ?", (query, query, query, query, query, query)).fetchall(),
+                'professionals': db.execute("SELECT * FROM professionals WHERE fname LIKE ? OR lname LIKE ? OR address LIKE ? OR email LIKE ? OR status LIKE ? OR description LIKE ? OR contact_number LIKE ?", (query, query, query, query, query, query, query)).fetchall(),
                 'service_requests': db.execute("SELECT * FROM service_requests WHERE date_of_request LIKE ? OR date_of_completion LIKE ? OR status LIKE ? OR rating LIKE ? OR remarks LIKE ?", (query, query, query, query, query)).fetchall()
             }
         elif user == 'professional' and id:
