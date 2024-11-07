@@ -72,7 +72,7 @@
         </nav>
 
         <div class="form-row text-center">
-            <div class="col-4">
+            <div class="col-5">
                 <!-- Services -->
                 <div class="form-container container-fluid">
                     <h2>Services</h2>
@@ -118,15 +118,16 @@
                         </table>
                     </div>
 
-                    <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#serviceModal">
-                        + New Service
-                    </button>
+                    <div class="d-flex justify-content-end my-3">
+                        <button type="button" id="add-service" class="btn btn-primary" data-toggle="modal" data-target="#serviceModal">
+                            Add Service
+                        </button>
+                    </div>
 
                     {% include 'add_service_modal.html' %}
                 </div>
             </div>
-            <div class="col-8">
+            <div class="col-7">
                 <!-- Customers -->
                 <div class="form-container container-fluid">
                     <h2>Customers</h2>
